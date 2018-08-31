@@ -19,7 +19,7 @@
 <div class="row">
 
 
-<div class="container">
+<div class="container col-8">
   <table class="table" id="myTable">
     <thead>
         <tr>
@@ -35,15 +35,15 @@
 
 </div>
 
-</div>
+
 <!-- formulario para crear un nuevo empleado -->
-<div class="row container " style="width: 50% ; padding-left: 10%;">
+<div class=" container col-4 " style="/*width: 50% ; padding-left: 10%;*/">
     <div class="container" style="float: left;">
       <h2>Crear Nuevo Empleado</h2>
       <form  id="js-form" name="js-form">
         <div class="form-group">
             <label for="cedula"> Cédula:</label>
-            <input type="text" class="form-control" id="cedula" placeholder="Cédula" name="cedula">
+            <input type="number" class="form-control" id="cedula" placeholder="Cédula" name="cedula">
         </div>
         <div class="form-group">
             
@@ -52,16 +52,16 @@
         </div>
         <div class="form-group">
                 <label for="apelido">Apellido:</label>
-                <input type="password" class="form-control" id="apelido" placeholder="Ingrese su apellido" name="apelido">
+                <input type="text" class="form-control" id="apellido" placeholder="Ingrese su apellido" name="apelido">
         </div>
         <div class="form-group">
           <label for="correo">Email:</label>
-          <input type="email" class="form-control" id="correo" placeholder="ejemplo@gmail.com" name="correo">
+          <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" name="email">
         </div>
 
         <div class="form-group">
           <label for="email">Telefono:</label>
-          <input type="text" class="form-control" id="fecha"  placeholder="0912345678"  name="fecha">
+          <input type="text" class="form-control" id="telefono"  placeholder="0912345678"  name="telefono">
     
         </div>
 
@@ -70,7 +70,7 @@
       </form>
     </div>
     </div>
-
+  </div>
 
 <script>
 var returnArr = [];
@@ -203,29 +203,23 @@ for (var x=rowCount-1; x>0; x--) {
 
 
 }
-
-function insertar(cedula,clave,codigocuenta, correo, latitud, longitud, fecha, nombre , tiponegocio){
-  const dbRef = firebase.database().ref().child('tutienda');
+// inserta la data en el arbol de firebase 
+function insertar(cedula,apellido,email, nombre, telefono){
+  const dbRef = firebase.database().ref().child('empleados');
   //dbRef.on('value', snap => holamundo.innerText = snap.val());
   //console.log(snap.val());
-  const dbRefLista= dbRef.child('cuenta');
-var refnuevo = dbRefLista.push({
-  activa: true,
+ // const dbRefLista= dbRef.child('cuenta');
+var refnuevo = dbRef.push({
   cedula: cedula,
-  clave: clave,
-  codigocuenta: codigocuenta,
-  correo: correo,
-  direccionlatitud: latitud,
-  direccionlongitud: longitud,
-  enuso: true,
-  existencia: true,
-  fecha: fecha,
+  apellido: apellido,
+  email: email,
   nombre: nombre,
-tiponegocio: tiponegocio
+  telefono: telefono
+  
 
 });
 // ingresar en la autenticacion el usuario 
-console.log("Obtenuiendo el usuario ingresado a firebase: ");
+console.log("Obtenuiendo el empleado ingresado a firebase: ");
 console.log(refnuevo);
 
 
@@ -233,22 +227,26 @@ console.log(refnuevo);
 
 
 function ejecutarInsert(){
+  /*
+  apellido:"Marcillo"
+cedula:"1705610689"
+email:"fmarcillo@topesa.com.ec"
+key:"IWBKCFiGgvaitbPtP6YZy5BC5Dp2"
+nombre:"Fabian"
+telefono:"0998334085"
+  */
+  // obtener los datos del formulario 
 var cedula= document.getElementById('cedula').value;
-var clave= document.getElementById('clave').value;
-var codigocuenta = document.getElementById('cedula').value;
-var correo = document.getElementById('correo').value;
-var latitud = 0//document.getElementById('latitud').value;
-var longitud = 0;//document.getElementById('longitud').value;
-var fecha = document.getElementById('fecha').value;
-fecha= fechaDDMMAA(fecha);
-    
-    
+var apellido= document.getElementById('apellido').value;
+var email = document.getElementById('email').value;
 var nombre = document.getElementById('nombre').value;
-var tiponegocio = document.getElementById('tiponegocio').value;
+var telefono = document.getElementById('telefono').value;
+
+
     
 
     
-insertar(cedula,clave,codigocuenta, correo, latitud, longitud, fecha, nombre ,tiponegocio);
+insertar(cedula,apellido,email, nombre, telefono);
 
 }
 
