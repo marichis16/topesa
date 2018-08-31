@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Registro de usuarios</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
+
+<body>
+
+<div class="container">
+  <h2>Registro de Usuarios Tu tienda App</h2>
+  <form  id="js-form" name="js-form">
+
+    <div class="form-group">
+      <label for="nombre">Nombre/Apellido:</label>
+      <input type="text" class="form-control" id="nombre" placeholder="Juan Perez" name="nombre">
+    </div>
+    <div class="form-group">
+      <label for="cedula"> Cédula:</label>
+      <input type="text" class="form-control" id="cedula" placeholder="Cédula" name="cedula">
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" name="email">
+    </div>
+    <div class="form-group">
+      <label for="clave">Clave:</label>
+      <input type="password" class="form-control" id="clave" placeholder="Ingrese su clave" name="clave">
+    </div>
+    <div class="form-group">
+      <label for="email"> Fecha de activación:</label>
+      <input type="date" class="form-control" id="fecha" name="fecha">
+
+    </div>
+    <div class="form-group">
+      <label for="tiponegocio"> Tipo de Negocio:</label>
+      <input type="text" class="form-control" id="tiponegocio" placeholder="Tienda/Bazar/Panaderia/Cafeteria/Otro" name="tiponegocio">
+    </div>
+
+    <button type="submit" class="form-control btn btn-info">Enviar</button>
+  </form>
+</div>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAXHMmzJHql7eXjRO7wHsbqtRHaqkOyTOo",
+    authDomain: "tutienda-5ef10.firebaseapp.com",
+    databaseURL: "https://tutienda-5ef10.firebaseio.com",
+    projectId: "tutienda-5ef10",
+    storageBucket: "tutienda-5ef10.appspot.com",
+    messagingSenderId: "586598065591"
+  };
+  firebase.initializeApp(config);
+
+  $('#js-form').on('submit',event =>{
+    event.preventDefault();
+    const email= $('#email').val();
+    const cedula= $('#cedula').val();
+    console.log(email, cedula);
+
+    var holamundo=document.getElementById('nombre');
+    var dbRef = firebase.database().ref().child('cedula');
+    dbRef.on('value', snap => holamundo.innerText = snap.val());
+    console.log(snap.val());
+
+
+  });
+
+</script>
+</body>
+</html>
