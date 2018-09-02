@@ -22,7 +22,7 @@
 
         auth.signInWithEmailAndPassword(email, password)
         .then(function(result){
-            window.location.href="views/pantallaEmpleados.html";
+            window.location.href="main.html";
         })
         .catch(function(error) {
             alert("El nombre de usuario y la contraseña que ingresaste no coinciden con nuestros registros. Por favor, revisa e inténtalo de nuevo.");

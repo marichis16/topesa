@@ -1,0 +1,57 @@
+/*    --------------------------------------------------
+	:: Login Section
+	-------------------------------------------------- */
+    #login {
+        padding-top: 150px
+    }
+    #login .form-wrap {
+        width: 30%;
+        margin: 0 auto;
+    }
+    #login h1 {
+        color: #993434;
+        font-size: 25px;
+        text-align: center;
+        font-weight: bold;
+        padding-bottom: 20px;
+    }
+    #login .form-group {
+        margin-bottom: 25px;
+    }
+    #login .btn.btn-custom {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    #login .btn.btn-customA {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    #login .forget {
+        font-size: 13px;
+        text-align: center;
+        display: block;
+    }
+    
+    /*    --------------------------------------------------
+        :: Inputs & Buttons
+        -------------------------------------------------- */
+    .form-control {
+        color: #212121;
+    }
+    .btn-custom {
+        color: #fff;
+        background-color: #993434;
+    }
+    .btn-custom:hover,
+    .btn-custom:focus {
+        color: #fff;
+    }
+    .btn-customA {
+        color: #993434;
+        background-color: #ffffff;
+        border-color: #993434;
+    }
+    .btn-customA:hover,
+    .btn-customA:focus {
+        color: #fff;
+    }
