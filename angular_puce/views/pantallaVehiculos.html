@@ -10,16 +10,19 @@
 </head>
 <body >
 <div class="container">
-    <h1 id = "holamundo">Empleados</h1>
+    <h1 id = "holamundo">Vehículos</h1>
     <button hidden="hidden" class="btn btn-success form-control" onclick="myFunction()">Cargar</button>
   
 </div>
-
+<div>
+    <button class="btn btn-success form-control" style="height:40px;width:150px;margin-left:75px; margin-top: 25px" onclick="mostrarNuevo()">Ingresar Nuevo</button>
+  
+</div>
 <hr>
 <div class="row">
 
 
-<div class="container col-8">
+<div class="container col-8" style="margin-left: 75px">
   <table class="table" id="myTable">
     <thead>
         <tr>
@@ -38,25 +41,26 @@
 
 
 <!-- formulario para crear un nuevo empleado -->
-<div class=" container col-4 " style="/*width: 50% ; padding-left: 10%;*/">
+<div class=" container col-4 " id="divNuevo" style="width: 50%">
+  <button onclick="cerrarNuevo()" style="float:right"  class="btn btn-danger">X</button>
     <div class="container" style="float: left;">
-      <h2>Crear Nuevo Empleado</h2>
+      <h2>Crear Nuevo Vehículo</h2>
     <!--  <form  id="js-form" name="js-form">-->
-            <div class="form-group">
+            <div class="form-group" style="margin-top: 25px">
             
                     <label for="empleado">Empleado:</label>
-                    <select id="empleado">
-                        <option value="">Seleccione una opcion</option>
+                    <select id="empleado" class="custom-select">
+                        <option value="">Seleccione un empleado</option>
                     </select>
                   </div>
         <div class="form-group">
             <label for="placa"> Placa:</label>
-            <input type="text" class="form-control" id="placa" placeholder="Placa" name="placa">
+            <input type="text" class="form-control" id="placa" placeholder="Ingrese la placa" name="placa">
         </div>
 
         <div class="form-group">
                 <label for="marca">Marca:</label>
-                <input type="text" class="form-control" id="marca" placeholder="Ingrese la Placa" name="marca">
+                <input type="text" class="form-control" id="marca" placeholder="Ingrese la marca" name="marca">
         </div>
         <div class="form-group">
           <label for="modelo">Modelo:</label>
@@ -75,7 +79,7 @@
       
           </div>
 
-        <button  class="btn btn-info form-control" onclick="ejecutarInsert()">Insertar</button>
+        <button  class="btn btn-success form-control" onclick="ejecutarInsert()">Insertar</button>
     
      <!-- </form>-->
     </div>
@@ -276,6 +280,17 @@ insertar(placa, marca, modelo, color, anio, empleadoID);
         return dia+"-"+mes+"-"+anio;
         
     }
+    function mostrarNuevo() {
+    var x = document.getElementById("divNuevo");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+function cerrarNuevo(){
+  document.getElementById('divNuevo').style.display = 'none';
+}
     
 </script>
 </body>
