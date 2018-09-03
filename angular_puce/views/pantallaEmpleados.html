@@ -32,6 +32,8 @@
           <th>Apellido</th>
           <th>Email</th>
           <th>Telefono</th>
+          <th>Eliminar</th>
+
         </tr>
       </thead>
   </table>
@@ -69,8 +71,9 @@
     
         </div>
 
-        <button  class="btn btn-success" onclick="ejecutarInsert()">Insertar</button>
-    
+        <button  class="btn btn-success" id="btn_insertar" onclick="ejecutarInsert()">Insertar</button>
+        <button  class="btn btn-info" id="btn_editar" onclick="ejecutarEditar()">Guardar</button>
+
       </form>
     </div>
     </div>
@@ -144,6 +147,7 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     var cell4 = row.insertCell(3);
     var cell5 = row.insertCell(4);
     var cell6 = row.insertCell(5);
+    var cell7 = row.insertCell(6);
 
     cell1.innerHTML = returnArr.length-i;
     cell2.innerHTML = returnArr[i].cedula;
@@ -151,6 +155,8 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     cell4.innerHTML = returnArr[i].apellido;
     cell5.innerHTML = returnArr[i].email;
     cell6.innerHTML = returnArr[i].telefono;
+    cell7.innerHTML = "<button onclick='cargar_editar("+i+")'>Eliminar</button>";
+    //cell7.innerHTML = "<button onclick='eliminar(\""+returnArr[i].key+"\")'>Eliminar</button>";
 
 }
 
@@ -168,45 +174,7 @@ listaUsuarios=JSON.stringify(snap.val());
 });
 
 
-function myFunction() {
-var table= document.getElementById('myTable');
 
-var elmtTable = document.getElementById('myTable');
-var tableRows = elmtTable.getElementsByTagName('tr');
-var rowCount = tableRows.length;
-
-for (var x=rowCount-1; x>0; x--) {
-   elmtTable.removeChild(tableRows[x]);
-}
-
-  for (i in returnArr) {
-    var row = table.insertRow(1);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-    var cell4 = row.insertCell(3);
-    var cell5 = row.insertCell(4);
-    var cell6 = row.insertCell(5);
-    var cell7 = row.insertCell(6);
-    var cell8 = row.insertCell(7);
-
-    cell1.innerHTML = i;
-    cell2.innerHTML = returnArr[i].cedula;
-    cell3.innerHTML = returnArr[i].nombre;
-    cell4.innerHTML = returnArr[i].codigocuenta;
-    cell5.innerHTML = returnArr[i].correo;
-    cell6.innerHTML = returnArr[i].fecha;
-    cell7.innerHTML = returnArr[i].activa;
-    cell8.innerHTML = returnArr[i].enuso;
-
-
-
-  //  console.log('Cedula:'+ returnArr[i].cedula);
-
-}
-
-
-}
 // inserta la data en el arbol de firebase 
 function insertar(cedula,apellido,email, nombre, telefono){
   const dbRef = firebase.database().ref().child('empleados');
@@ -226,6 +194,52 @@ var refnuevo = dbRef.push({
 console.log("Obtenuiendo el empleado ingresado a firebase: ");
 console.log(refnuevo);
 
+
+}
+
+function editar(key_empleado,cedula,apellido,email, nombre, telefono){
+  const dbRef = firebase.database().ref('users/' + key_empleado);//.child('empleados');
+  //dbRef.on('value', snap => holamundo.innerText = snap.val());
+  //console.log(snap.val());
+ // const dbRefLista= dbRef.child('cuenta');
+var refnuevo = dbRef.set({
+  cedula: cedula,
+  apellido: apellido,
+  email: email,
+  nombre: nombre,
+  telefono: telefono
+  
+
+});
+}
+
+function ejecutarEditar(key_empleado){
+
+var cedula= document.getElementById('cedula').value;
+var apellido= document.getElementById('apellido').value;
+var email = document.getElementById('email').value;
+var nombre = document.getElementById('nombre').value;
+var telefono = document.getElementById('telefono').value;
+
+
+    
+
+    
+    editar(key_empleado,cedula,apellido,email, nombre, telefono);
+
+}
+function cargar_editar(posicion){
+
+document.getElementById('cedula').value= returnArr[posicion].cedula;
+document.getElementById('apellido').value= returnArr[posicion].apellido;
+document.getElementById('email').value= returnArr[posicion].email;
+document.getElementById('nombre').value= returnArr[posicion].nombre;
+document.getElementById('telefono').value= returnArr[posicion].telefono;
+
+
+    
+
+    
 
 }
 
