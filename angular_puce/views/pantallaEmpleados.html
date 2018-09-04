@@ -32,6 +32,7 @@
           <th>Apellido</th>
           <th>Email</th>
           <th>Telefono</th>
+          <th>Editar</th>
           <th>Eliminar</th>
 
         </tr>
@@ -44,6 +45,8 @@
 <!-- formulario para crear un nuevo empleado -->
 <div class=" container col-4 " id="divNuevo" style="width: 25%">
   <button onclick="cerrarNuevo()" style="float:right"  class="btn btn-danger">X</button>
+  <input type="hidden" id="key_empleado"  name="key_empleado" value="">
+
     <div class="container" style="float: left;">
       <h2>Crear Nuevo Empleado</h2>
       <form  id="js-form" name="js-form">
@@ -78,7 +81,6 @@
     </div>
     </div>
   </div>
-<<<<<<< HEAD
 
 <script>
 var returnArr = [];
@@ -149,6 +151,7 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     var cell5 = row.insertCell(4);
     var cell6 = row.insertCell(5);
     var cell7 = row.insertCell(6);
+    var cell8 = row.insertCell(7);
 
     cell1.innerHTML = returnArr.length-i;
     cell2.innerHTML = returnArr[i].cedula;
@@ -156,8 +159,8 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     cell4.innerHTML = returnArr[i].apellido;
     cell5.innerHTML = returnArr[i].email;
     cell6.innerHTML = returnArr[i].telefono;
-    cell7.innerHTML = "<button onclick='cargar_editar("+i+")'>Eliminar</button>";
-    //cell7.innerHTML = "<button onclick='eliminar(\""+returnArr[i].key+"\")'>Eliminar</button>";
+    cell7.innerHTML = "<button onclick='cargar_editar("+i+")'>Editar</button>";
+    cell8.innerHTML = "<button onclick='ejecutar_eliminar(\""+returnArr[i].key+"\")'>Eliminar</button>";
 
 }
 
@@ -199,7 +202,8 @@ console.log(refnuevo);
 }
 
 function editar(key_empleado,cedula,apellido,email, nombre, telefono){
-  const dbRef = firebase.database().ref('users/' + key_empleado);//.child('empleados');
+  //const dbRef= firebase.database().ref().child('empleados').child(key_empleado);
+  const dbRef = firebase.database().ref('empleados/' + key_empleado);//.child('empleados');
   //dbRef.on('value', snap => holamundo.innerText = snap.val());
   //console.log(snap.val());
  // const dbRefLista= dbRef.child('cuenta');
@@ -214,15 +218,14 @@ var refnuevo = dbRef.set({
 });
 }
 
-function ejecutarEditar(key_empleado){
+function ejecutarEditar(){
 
 var cedula= document.getElementById('cedula').value;
 var apellido= document.getElementById('apellido').value;
 var email = document.getElementById('email').value;
 var nombre = document.getElementById('nombre').value;
 var telefono = document.getElementById('telefono').value;
-
-
+var key_empleado= document.getElementById('key_empleado').value;
     
 
     
@@ -236,7 +239,7 @@ document.getElementById('apellido').value= returnArr[posicion].apellido;
 document.getElementById('email').value= returnArr[posicion].email;
 document.getElementById('nombre').value= returnArr[posicion].nombre;
 document.getElementById('telefono').value= returnArr[posicion].telefono;
-
+document.getElementById('key_empleado').value= returnArr[posicion].key;
 
     
 
@@ -269,6 +272,22 @@ insertar(cedula,apellido,email, nombre, telefono);
 
 }
 
+
+//*****************************eliminar
+function ejecutar_eliminar(key_empleado){
+
+if( confirm("Seguro desea eliminar?")){
+  eliminar(key_empleado);
+}
+
+
+}
+function eliminar(key_empleado){
+  const dbRef = firebase.database().ref('empleados/' + key_empleado);//.child('empleados');
+  dbRef.remove();
+}
+//*****************************************
+
     function fechaDDMMAA(fechaAAMMDD){
         //2018-01-01 --> 01-01-2018
         var anio= fechaAAMMDD.substring(0,4);
@@ -289,8 +308,7 @@ function cerrarNuevo(){
   document.getElementById('divNuevo').style.display = 'none';
 }
 </script>
-=======
-<script src="../js/empleados.js"></script>
->>>>>>> ab6df57183eda6314ee7d2a4cf6ede0605768200
+
+<!--<script src="../js/empleados.js"></script>-->
 </body>
 </html>
