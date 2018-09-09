@@ -1,39 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
+<head>
+  <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+    crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+    crossorigin="anonymous"></script>
 </head>
+<style>
+  /* Set the size of the div element that contains the map */
+  #map {
+    height: 400px;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
+  }
+</style>
+<SCRIPT>
+  var map;
+  var marker_inicio;
+  var marker_fin;
+
+</SCRIPT>
+
 <body class="container">
 
-  <h1 id = "holamundo">Listado de Clientes</h1>
+  <h1 id="holamundo">Listado de Clientes</h1>
   <button hidden="hidden" class="btn btn-success form-control" onclick="myFunction()">Cargar</button>
 
-<hr>
-<div class="row">
+  <hr>
+  <div class="row">
 
 
-<div class="col-sm-6">
-  <table class="table" id="myTable">
-    <thead>
-        <tr>
-          <th>#</th>
-          <th>Empleado</th>
-          <th>Cliente</th>
-          <th>Fecha</th>
-          <th>Hora Inicio</th>
-          <th>Hora Fin</th>
-          <th>Observación</th>
-          <th>Imagen</th>
-          <th>Ubicación Inicio</th>
-          <th>Ubicación Fin</th>
-        </tr>
-      </thead>
-  </table>
+
+
+    <script>
+      // Initialize and add the map
+      function initMap() {
+        // The location of Uluru
+        var lugar_inicio = {
+          lat: -0.001,
+          lng: -78.67
+        };
+        var lugar_fin = {
+          lat: 0.002,
+          lng: -78.5647
+        };
+
+        // The map, centered at Uluru
+          map = new google.maps.Map(
+          document.getElementById('map'), {
+            zoom: 10,
+            center: lugar_inicio
+          });
+        // The marker, positioned at Uluru
+        /*marker_inicio = new google.maps.Marker({
+          position: lugar_inicio,
+          map: map
+        });
+        marker_fin = new google.maps.Marker({
+          position: lugar_fin,
+          map: map
+        });*/
+
+      }
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkE9yLDd6MTlzMlx-kZBmHkQIern8kZHM&callback=initMap">
+    </script>
   </div>
+
+  <div class="row">
+
+
+    <div class="col-sm-6">
+      <table class="table" id="myTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Empleado</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fin</th>
+            <th>Observación</th>
+            <th>Imagen</th>
+           <!-- <th>Ubicación Inicio</th>
+            <th>Ubicación Fin</th>-->
+            <th>Ubicación INICIO-FIN</th>
+
+          </tr>
+        </thead>
+      </table>
+    </div>
   </div>
-  <script src="../js/visitas.js"></script>
+
+
+
+  <!--script para que funcione el mapa de google -->
+  <h3>MAPA</h3>
+  <!--The div element for the map -->
+  <div id="map"></div>
+
+
+  <script src="../js/visitas.js">
+  </script>
+
 </body>
+
 </html>
