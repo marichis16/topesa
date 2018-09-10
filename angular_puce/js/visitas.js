@@ -17,34 +17,30 @@ firebase.initializeApp(config);
 
 const lista = document.getElementById('lista');
 const dbRef = firebase.database().ref().child('visitas');
-const dbRef_empleados = firebase.database().ref().child('empleados'); // para pobalr el select 
+const dbRef_empleados = firebase.database().ref().child('empleados'); 
 const dbRef_clientes = firebase.database().ref().child('clientes');
 
-// var empleado;
-// var cliente;
+dbRef_empleados.on('value', snap=>{
+    returnEmpleados= [];
+    snap.forEach(function(snap){
+        console.log('Elemento');
+        var item = snap.val();
+        item.key= snap.key;
+        console.log(item);
+        returnEmpleados.push(item);
+    })
+});
 
-// dbRef_empleados.on('value', snap=>{
-//     returnEmpleados= [];
-//     snap.forEach(function(snap){
-//         console.log('Elemento');
-//         var item = snap.val();
-//         item.key= snap.key;
-//         console.log(item);
-//         returnEmpleados.push(item);
-//     })
-// });
-
-// dbRef_clientes.on('value', snap=>{
-//     returnClientes= [];
-//     snap.forEach(function(snap){
-//         console.log('Elemento');
-//         var item = snap.val();
-//         item.key= snap.key;
-//         console.log(item);
-//         returnClientes.push(item);
-//     })
-// });
-
+dbRef_clientes.on('value', snap=>{
+    returnClientes= [];
+    snap.forEach(function(snap){
+        console.log('Elemento');
+        var item = snap.val();
+        item.key= snap.key;
+        console.log(item);
+        returnClientes.push(item);
+    })
+});
 
 dbRef.on('value', snap => {
   returnArr = [];
@@ -54,11 +50,29 @@ dbRef.on('value', snap => {
     item.key = snap.key;
     for (i in item) {
       if (item.key != item[i]) {
-        console.log(item[i]);
+
+        //Busca el nombre del cliente de acuerdo a su key
+        for(cli in returnClientes){
+          if(returnClientes[cli].key == item[i].clienteID){
+            console.log('CLIENTES ARR');
+            item[i].clienteID = returnClientes[cli].nombre;
+
+          }
+        }
+
+        //Busca el nombre del empleado de acuerdo a su key
+        for(emp in returnEmpleados){
+          if(returnEmpleados[emp].key == item[i].empleadoID){
+            console.log('EMPLEADOS ARR');
+            item[i].empleadoID = returnEmpleados[emp].nombre + " "+returnEmpleados[emp].apellido;
+          }
+        }
         returnArr.push(item[i]);
+        console.log(item[i]);
       }
     }
   });
+
 
   console.log('Arreglo');
 
@@ -87,12 +101,8 @@ dbRef.on('value', snap => {
     var cell7 = row.insertCell(6);
     var cell8 = row.insertCell(7);
     var cell9 = row.insertCell(8);
-   // var cell10 = row.insertCell(9);
-    //var cell11 = row.insertCell(10);
+    // var cell10 = row.insertCell(9);
 
-    /*
-
-    */
     cell1.innerHTML = returnArr.length - i;
     cell2.innerHTML = returnArr[i].empleadoID;
     cell3.innerHTML = returnArr[i].clienteID;
@@ -101,33 +111,15 @@ dbRef.on('value', snap => {
     cell6.innerHTML = returnArr[i].horafin;
     cell7.innerHTML = returnArr[i].observacion;
     cell8.innerHTML = "<img src='" + returnArr[i].imagenURI + "' width='100' heigth='100' >";
-    //cell9.innerHTML = "<a  target='_blank' href='https://www.google.com/maps/?q=" + returnArr[i].latitudInicio + "," + returnArr[i].longitudInicio + "' >Ubicacion</a>";
-    //cell10.innerHTML = "<a  target='_blank' href='https://www.google.com/maps/?q=" + returnArr[i].latitudFin + "," + returnArr[i].longitudFin + "' >Ubicacion</a>";
-    cell9.innerHTML = "<button onclick='verUbicacionMapa(" + i + ")'>Ver  en mapa</button>";
-
-
+    cell9.innerHTML = "<button class='btn btn-link' onclick='verUbicacionMapa(" + i + ")'>Ver en mapa</button>";
   }
-
-
-
-  /*const li= document.createElement('li');
-listaUsuarios=JSON.stringify(snap.val());
-
- li.innerText = listaUsuarios;
- lista.appendChild(li);*/
-
-  //console.log(JSON.stringify(snap.val()));
-
 
 });
 
 function verUbicacionMapa(posicion) {
 
- // alert(posicion);
   initMap();
 
-
-  // posicion
   console.log(returnArr[posicion]);
   lat_inicio = returnArr[posicion].latitudInicio;
   long_inicio = returnArr[posicion].longitudInicio;
@@ -163,54 +155,7 @@ function verUbicacionMapa(posicion) {
     map: map
   });
 
-
-
-
 }
-
-function myFunction() {
-  var table = document.getElementById('myTable');
-
-  var elmtTable = document.getElementById('myTable');
-  var tableRows = elmtTable.getElementsByTagName('tr');
-  var rowCount = tableRows.length;
-
-  for (var x = rowCount - 1; x > 0; x--) {
-    elmtTable.removeChild(tableRows[x]);
-  }
-
-  for (i in returnArr) {
-    var row = table.insertRow(1);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-    var cell4 = row.insertCell(3);
-    var cell5 = row.insertCell(4);
-    var cell6 = row.insertCell(5);
-    var cell7 = row.insertCell(6);
-    var cell8 = row.insertCell(7);
-
-    var cell9 = row.insertCell(8);
-    var cel10 = row.insertCell(9);
-
-    cell1.innerHTML = i;
-    cell2.innerHTML = returnArr[i].cedula;
-    cell3.innerHTML = returnArr[i].nombre;
-    cell4.innerHTML = returnArr[i].codigocuenta;
-    cell5.innerHTML = returnArr[i].correo;
-    cell6.innerHTML = returnArr[i].fecha;
-    cell7.innerHTML = returnArr[i].activa;
-    cell8.innerHTML = returnArr[i].enuso;
-
-
-
-    //  console.log('Cedula:'+ returnArr[i].cedula);
-
-  }
-
-
-}
-
 
 function fechaDDMMAA(fechaAAMMDD) {
   //2018-01-01 --> 01-01-2018
@@ -218,5 +163,9 @@ function fechaDDMMAA(fechaAAMMDD) {
   var mes = fechaAAMMDD.substring(5, 7);
   var dia = fechaAAMMDD.substring(8, 10);
   return dia + "-" + mes + "-" + anio;
+}
 
+function logOut(){
+  firebase.auth().signOut();
+  window.location.href="../login.html";
 }
