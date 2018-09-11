@@ -44,6 +44,7 @@ var returnArr = [];
 
 //--------------------------------
 var table= document.getElementById('myTable');
+var cont=0;
 
 var tableHeaderRowCount = 1;
 var table = document.getElementById('myTable');
@@ -54,22 +55,30 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
 
 
   for (i in returnArr) {
-    var row = table.insertRow(1);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-    var cell4 = row.insertCell(3);
-    var cell5 = row.insertCell(4);
 
 
 /*
 
 */
-    cell1.innerHTML = returnArr.length-i;
-    cell2.innerHTML = returnArr[i].lat;
-    cell3.innerHTML = returnArr[i].lng;
-    cell4.innerHTML = returnArr[i].power;
-    cell5.innerHTML = returnArr[i].time;
+    //cell2.innerHTML = returnArr[i].lat;
+  
+    // recorrer 
+    for (j in returnArr[i]) {
+      var row = table.insertRow(1);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      var cell4 = row.insertCell(3);
+      var cell5 = row.insertCell(4);
+  
+      cell1.innerHTML = cont++;
+      cell2.innerHTML =  returnArr[i][j].lat;
+      cell3.innerHTML = returnArr[i][j].lng;
+      cell4.innerHTML = returnArr[i][j].power;
+      cell5.innerHTML = returnArr[i].key;
+
+    }
+    
    
 }
 
