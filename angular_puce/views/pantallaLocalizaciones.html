@@ -1,37 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+    crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+    crossorigin="anonymous"></script>
+  <style>
+    #map {
+      height: 50vh;
+      /* The height is 400 pixels */
+      width: 100%;
+      /* The width is the width of the web page */
+    }
+  </style>
+  <script>
+    $('#myTable tr td').on("DOMSubtreeModified", function () {
+      alert('changed');
+    });
+  </script>
 </head>
-<body class="container">
 
-  <h1 id = "holamundo">Listado de Clientes</h1>
+<body class="" style="padding: 10px;">
+
+  <h1 id="holamundo">Ubicacion de vehiculos</h1>
   <button hidden="hidden" class="btn btn-success form-control" onclick="myFunction()">Cargar</button>
 
-<hr>
-<div class="row">
+  <hr>
+  <div class="row">
 
 
-<div class="col-sm-6">
-  <table class="table" id="myTable">
-    <thead>
-        <tr>
-          <th>#</th>
-          <th>lat</th>
-          <th>long</th>
-          <th>power</th>
-          <th>fecha</th>
-          <th>placa</th>
-        
+    <div class="col-6">
+      <div class="container bg-info  rounded" style="padding: 5px;" >
+        <h3>Vehiculo Seleccionado:</h3>
+        <p id="placa_seleccionada"></p>
+      </div>
+      <table class="table" id="myTable" onchange="alert('hola')">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>lat</th>
+            <th>long</th>
+            <th>power</th>
+            <th>fecha</th>
+            <th>placa</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="col-6">
 
-        </tr>
-      </thead>
-  </table>
+      <div id="map"></div>
+
+    </div>
   </div>
+  <div>
+
   </div>
+
   <script src="../js/localizaciones.js"></script>
+  <script>
+    // Initialize and add the map
+    function initMap() {
+      // The location of Uluru
+      var uluru = {
+        lat: -25.344,
+        lng: 131.036
+      };
+      // The map, centered at Uluru
+      var map = new google.maps.Map(
+        document.getElementById('map'), {
+          zoom: 4,
+          center: uluru
+        });
+      // The marker, positioned at Uluru
+      var marker = new google.maps.Marker({
+        position: uluru,
+        map: map
+      });
+    }
+  </script>
+  <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkE9yLDd6MTlzMlx-kZBmHkQIern8kZHM&callback=initMap">
+  </script>
 </body>
+
 </html>

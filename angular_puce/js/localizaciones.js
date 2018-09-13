@@ -1,32 +1,37 @@
 var returnArr = [];
+// vehiculo seleccionado 
+var latitud_vehiculo;
+var longitud_vehiculo;
+var placa_vehiculo;
+var obj_vehiculo;
+var marker_vehiculo;
+// Initialize Firebase
 
-  // Initialize Firebase
-
-  var config = {
-    apiKey: "AIzaSyD84c5uXptNfZa0UcaxvTuVZd2R3eTzvxA",
-    authDomain: "control-7c5d7.firebaseapp.com",
-    databaseURL: "https://control-7c5d7.firebaseio.com",
-    projectId: "control-7c5d7",
-    storageBucket: "control-7c5d7.appspot.com",
-    messagingSenderId: "635319972706"
-  };
-  firebase.initializeApp(config);
+var config = {
+  apiKey: "AIzaSyD84c5uXptNfZa0UcaxvTuVZd2R3eTzvxA",
+  authDomain: "control-7c5d7.firebaseapp.com",
+  databaseURL: "https://control-7c5d7.firebaseio.com",
+  projectId: "control-7c5d7",
+  storageBucket: "control-7c5d7.appspot.com",
+  messagingSenderId: "635319972706"
+};
+firebase.initializeApp(config);
 
 
-    const lista = document.getElementById('lista');
-    const dbRef = firebase.database().ref().child('localizaciones');
-    //dbRef.on('value', snap => holamundo.innerText = snap.val());
-    //console.log(snap.val());
-   // const dbRefLista= dbRef.child('clientes');
-    dbRef.on('value', snap => {
-  returnArr=[];
-  snap.forEach(function(snap) {
+const lista = document.getElementById('lista');
+const dbRef = firebase.database().ref().child('localizaciones');
+//dbRef.on('value', snap => holamundo.innerText = snap.val());
+//console.log(snap.val());
+// const dbRefLista= dbRef.child('clientes');
+dbRef.on('value', snap => {
+  returnArr = [];
+  snap.forEach(function (snap) {
     console.log('Elemento');
-    var item=snap.val();
+    var item = snap.val();
     item.key = snap.key;
 
-     console.log( item);
-     returnArr.push(item);
+    console.log(item);
+    returnArr.push(item);
 
 
 
@@ -35,160 +40,180 @@ var returnArr = [];
 
 
   console.log('Arreglo');
+  console.log(returnArr);
 
-  console.log( returnArr);
+  //--------------------------------
+  var table = document.getElementById('myTable');
+  var cont = 0;
 
-
-
-
-
-//--------------------------------
-var table= document.getElementById('myTable');
-var cont=0;
-
-var tableHeaderRowCount = 1;
-var table = document.getElementById('myTable');
-var rowCount = table.rows.length;
-for (var i = tableHeaderRowCount; i < rowCount; i++) {
+  var tableHeaderRowCount = 1;
+  var table = document.getElementById('myTable');
+  var rowCount = table.rows.length;
+  for (var i = tableHeaderRowCount; i < rowCount; i++) {
     table.deleteRow(tableHeaderRowCount);
-}
+  }
 
 
   for (i in returnArr) {
 
 
-/*
+    /*
 
-*/
+    */
     //cell2.innerHTML = returnArr[i].lat;
-  
-    // recorrer 
-    for (j in returnArr[i]) {
+
+    // solo obtener el ultimo 
+    if (returnArr[i].length > 0) {
+      console.log("ultima ubicacione de " + returnArr[i].key);
+      var obj_ubicacion = returnArr[i][returnArr[i].length - 1];
+      console.log(obj_ubicacion);
+
       var row = table.insertRow(1);
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
       var cell4 = row.insertCell(3);
       var cell5 = row.insertCell(4);
-  
+      var cell6 = row.insertCell(5);
+      var cell7 = row.insertCell(6);
+
       cell1.innerHTML = cont++;
-      cell2.innerHTML =  returnArr[i][j].lat;
-      cell3.innerHTML = returnArr[i][j].lng;
-      cell4.innerHTML = returnArr[i][j].power;
+      cell2.innerHTML = obj_ubicacion.lat;
+      cell3.innerHTML = obj_ubicacion.lng;
+      cell4.innerHTML = obj_ubicacion.power;
       cell5.innerHTML = returnArr[i].key;
+      cell6.innerHTML = obj_ubicacion.power;
+      cell7.innerHTML = "<button onclick='localizar_en_mapa(" + i + ")'>Seguir</button>";
 
     }
-    
-   
-}
+
+    if(returnArr[i].key== placa_vehiculo){
+
+      latitud_vehiculo= obj_ubicacion.lat;
+      longitud_vehiculo=obj_ubicacion.lng;
+
+      actualizar_marker(placa_vehiculo,latitud_vehiculo,longitud_vehiculo);
+    }
+
+    /*  for (j in returnArr[i]) {
+        var row = table.insertRow(1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+  
+        cell1.innerHTML = cont++;
+        cell2.innerHTML =  returnArr[i][j].lat;
+        cell3.innerHTML = returnArr[i][j].lng;
+        cell4.innerHTML = returnArr[i][j].power;
+        cell5.innerHTML = returnArr[i].key;
+
+      }*/
+
+
+  }
 
 
 
- /*const li= document.createElement('li');
+  /*const li= document.createElement('li');
 listaUsuarios=JSON.stringify(snap.val());
 
  li.innerText = listaUsuarios;
  lista.appendChild(li);*/
 
   //console.log(JSON.stringify(snap.val()));
+// al final actualizar el marcador 
 
 
 });
 
+//***************************************************/
 
-function myFunction() {
-var table= document.getElementById('myTable');
-
-var elmtTable = document.getElementById('myTable');
-var tableRows = elmtTable.getElementsByTagName('tr');
-var rowCount = tableRows.length;
-
-for (var x=rowCount-1; x>0; x--) {
-   elmtTable.removeChild(tableRows[x]);
+function actualizar_marker(placa_seleccionada,latitud,longitud){
+  var placa_vehiculo = document.getElementById('placa_seleccionada');
+  placa_vehiculo.innerHTML= "Placa: " + placa_seleccionada + " Latitud: "+latitud+" Longitud:"+ longitud;
+  //obj_vehiculo;
+  localizar_en_mapa_obj(placa_seleccionada,latitud,longitud);
 }
-
-  for (i in returnArr) {
-    var row = table.insertRow(1);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-    var cell4 = row.insertCell(3);
-    var cell5 = row.insertCell(4);
-    var cell6 = row.insertCell(5);
-    var cell7 = row.insertCell(6);
-    var cell8 = row.insertCell(7);
-
-    cell1.innerHTML = i;
-    cell2.innerHTML = returnArr[i].cedula;
-    cell3.innerHTML = returnArr[i].nombre;
-    cell4.innerHTML = returnArr[i].codigocuenta;
-    cell5.innerHTML = returnArr[i].correo;
-    cell6.innerHTML = returnArr[i].fecha;
-    cell7.innerHTML = returnArr[i].activa;
-    cell8.innerHTML = returnArr[i].enuso;
+//***************************************************/
+function localizar_en_mapa(posicion) {
+  var obj_ubicacion = returnArr[posicion][returnArr[posicion].length - 1];
+  latitud_vehiculo= obj_ubicacion.lat;
+  longitud_vehiculo= obj_ubicacion.lng;
+  placa_vehiculo= returnArr[posicion].key;
+  actualizar_marker(placa_vehiculo,latitud_vehiculo,longitud_vehiculo);
+  // alert(posicion);
+  initMap();
 
 
+  // posicion
+  console.log(returnArr[posicion]);
+  lat_inicio = obj_ubicacion.lat;
+  long_inicio =  obj_ubicacion.lng;
+ 
+  var lugar_inicio = {
+    lat: lat_inicio,
+    lng: long_inicio
+  };
 
-  //  console.log('Cedula:'+ returnArr[i].cedula);
+  // zoom al mapa
+  map = new google.maps.Map(
+    document.getElementById('map'), {
+      zoom: 20,
+      center: lugar_inicio
+    });
 
-}
+  console.log(lugar_inicio);
+  // The marker, positioned at Uluru
+  marker_vehiculo= new google.maps.Marker({
+    position: lugar_inicio,
+    label: returnArr[posicion].key,
 
-
-}
-
-function insertar(cedula,clave,codigocuenta, correo, latitud, longitud, fecha, nombre , tiponegocio){
-  const dbRef = firebase.database().ref().child('tutienda');
-  //dbRef.on('value', snap => holamundo.innerText = snap.val());
-  //console.log(snap.val());
-  const dbRefLista= dbRef.child('cuenta');
-var refnuevo = dbRefLista.push({
-  activa: true,
-  cedula: cedula,
-  clave: clave,
-  codigocuenta: codigocuenta,
-  correo: correo,
-  direccionlatitud: latitud,
-  direccionlongitud: longitud,
-  enuso: true,
-  existencia: true,
-  fecha: fecha,
-  nombre: nombre,
-tiponegocio: tiponegocio
-
-});
-// ingresar en la autenticacion el usuario 
-console.log("Obtenuiendo el usuario ingresado a firebase: ");
-console.log(refnuevo);
-
+    map: map
+  });
 
 }
 
+//***************************************************/
+function localizar_en_mapa_obj(placa, latitud,longitud) {
+  latitud_vehiculo= latitud;
+  longitud_vehiculo= longitud;
+  placa_vehiculo= placa;
+  //actualizar_marker(placa_vehiculo,latitud_vehiculo,longitud_vehiculo);
+  // alert(posicion);
+  initMap();
 
-function ejecutarInsert(){
-var cedula= document.getElementById('cedula').value;
-var clave= document.getElementById('clave').value;
-var codigocuenta = document.getElementById('cedula').value;
-var correo = document.getElementById('correo').value;
-var latitud = 0//document.getElementById('latitud').value;
-var longitud = 0;//document.getElementById('longitud').value;
-var fecha = document.getElementById('fecha').value;
-fecha= fechaDDMMAA(fecha);
-    
-    
-var nombre = document.getElementById('nombre').value;
-var tiponegocio = document.getElementById('tiponegocio').value;
-    
 
-    
-insertar(cedula,clave,codigocuenta, correo, latitud, longitud, fecha, nombre ,tiponegocio);
+  // posicion
+  lat_inicio = latitud;
+  long_inicio =  longitud;
+ 
+  var lugar_inicio = {
+    lat: lat_inicio,
+    lng: long_inicio
+  };
+
+  // zoom al mapa
+  map = new google.maps.Map(
+    document.getElementById('map'), {
+      zoom: 18,
+      center: lugar_inicio
+    });
+
+  console.log(lugar_inicio);
+  // The marker, positioned at Uluru
+  marker_vehiculo= new google.maps.Marker({
+    position: lugar_inicio,
+    label: placa,
+
+    map: map
+  });
 
 }
 
-    function fechaDDMMAA(fechaAAMMDD){
-        //2018-01-01 --> 01-01-2018
-        var anio= fechaAAMMDD.substring(0,4);
-        var mes= fechaAAMMDD.substring(5,7);
-        var dia= fechaAAMMDD.substring(8,10);
-        return dia+"-"+mes+"-"+anio;
-        
-    }
+
+
+
+
+
