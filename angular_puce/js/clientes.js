@@ -189,11 +189,18 @@ insertar(cedula,clave,codigocuenta, correo, latitud, longitud, fecha, nombre ,ti
 
 }
 
-    function fechaDDMMAA(fechaAAMMDD){
-        //2018-01-01 --> 01-01-2018
-        var anio= fechaAAMMDD.substring(0,4);
-        var mes= fechaAAMMDD.substring(5,7);
-        var dia= fechaAAMMDD.substring(8,10);
-        return dia+"-"+mes+"-"+anio;
-        
-    }
+function fechaDDMMAA(fechaAAMMDD){
+    //2018-01-01 --> 01-01-2018
+    var anio= fechaAAMMDD.substring(0,4);
+    var mes= fechaAAMMDD.substring(5,7);
+    var dia= fechaAAMMDD.substring(8,10);
+    return dia+"-"+mes+"-"+anio;
+    
+}
+
+
+function logOut(){
+  firebase.auth().signOut();
+  //alert("Sesión cerrada.");
+  window.location.href="../login.html";
+}

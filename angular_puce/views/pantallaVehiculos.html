@@ -6,33 +6,61 @@
     <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
+  <link rel="stylesheet" href="../CSS/paginas.css">
 </head>
 <body >
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="../main.html">
+                        <img src="../images/home.png" width="20" height="20" id="nbarImgMenu" class="d-inline-block" alt="">
+                        Menú
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaEmpleados.html">Empleados</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbarAct" href="./pantallaVehiculos.html">Vehículos<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaClientes.html">Clientes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaVisitas.html">Visitas</a>
+                </li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item active">
+                    <button class="btn btn-dark" id="nbarLink" onclick="logOut()">
+                      <img src="../images/user.png" width="18" height="18" class="d-inline-block align-top" alt="">
+                      Cerrar Sesión</button>
+                </li>
+            </ul>
+          </div>
+      </nav>
 <div class="container">
-    <h1 id = "holamundo">Vehículos</h1>
-    <button hidden="hidden" class="btn btn-success form-control" onclick="myFunction()">Cargar</button>
-  
+    <h1 id = "titulos">Vehículos</h1>  
 </div>
 <div>
-    <button class="btn btn-success form-control" style="height:40px;width:150px;margin-left:75px; margin-top: 25px" onclick="mostrarNuevo()">Ingresar Nuevo</button>
-  
+    <button class="btn btn-info btn-sm form-control" id="btnNuevo" onclick="mostrarNuevo()">Ingresar Nuevo</button>
 </div>
-<hr>
 <div class="row">
 
-
-<div class="container col-8" style="margin-left: 75px">
+<div class="container col-11" id="tabla">
   <table class="table" id="myTable">
     <thead>
         <tr>
           <th>#</th>
-
           <th>Placa</th>
           <th>Marca</th>
           <th>Modelo</th>
           <th>Color</th>
           <th>Año</th>
+          <th style="text-align: center">Editar</th>
+          <th>Eliminar</th>
         </tr>
       </thead>
   </table>
@@ -40,17 +68,17 @@
 </div>
 
 
-<!-- formulario para crear un nuevo empleado -->
-<div class=" container col-4 " id="divNuevo" style="width: 50%">
+<!-- formulario para crear un nuevo vehiculo -->
+<div class=" container col-4 " id="divNuevo" style="width: 25% ; display:none">
   <button onclick="cerrarNuevo()" style="float:right"  class="btn btn-danger">X</button>
-    <div class="container" style="float: left;">
-      <h2>Crear Nuevo Vehículo</h2>
-    <!--  <form  id="js-form" name="js-form">-->
+  <input type="hidden" id="key_vehiculo"  name="key_vehiculo" value="">  
+  <div class="container" style="float: left;">
+      <h2 id="nuevos">Crear Nuevo Vehículo</h2>
             <div class="form-group" style="margin-top: 25px">
             
                     <label for="empleado">Empleado:</label>
                     <select id="empleado" class="custom-select">
-                        <option value="">Seleccione un empleado</option>
+                        <option id="selecEmpleado" value="">Seleccione un empleado</option>
                     </select>
                   </div>
         <div class="form-group">
@@ -77,11 +105,10 @@
             <label for="anio">Año:</label>
             <input type="number" class="form-control" id="anio"  placeholder="Ingrese el año"  name="anio">
       
-          </div>
+        </div>
 
-        <button  class="btn btn-success form-control" onclick="ejecutarInsert()">Insertar</button>
-    
-     <!-- </form>-->
+        <button  class="btn btn-success" id="btn_insertar" onclick="ejecutarInsert()">Insertar</button>
+        <button  class="btn btn-info" id="btn_editar" onclick="ejecutarEditar()">Guardar</button>
     </div>
     </div>
   </div>

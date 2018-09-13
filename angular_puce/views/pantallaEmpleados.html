@@ -6,25 +6,53 @@
     <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
+  <link rel="stylesheet" href="../CSS/paginas.css">
 </head>
 <body >
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="../main.html">
+                        <img src="../images/home.png" width="20" height="20" id="nbarImgMenu" class="d-inline-block" alt="">
+                        Menú
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbarAct" href="./pantallaEmpleados.html">Empleados<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaVehiculos.html">Vehículos</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaClientes.html">Clientes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaVisitas.html">Visitas</a>
+                </li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item active">
+                    <button class="btn btn-dark" id="nbarLink" onclick="logOut()">
+                      <img src="../images/user.png" width="18" height="18" class="d-inline-block align-top" alt="">
+                      Cerrar Sesión</button>
+                </li>
+            </ul>
+          </div>
+      </nav>
 <div class="container">
-    <h1 id = "holamundo">Empleados</h1>
+    <h1 id = "titulos">Empleados</h1>
     <button hidden="hidden" class="btn btn-success form-control" onclick="myFunction()">Cargar</button>
-  
 </div>
 <div>
-    <button class="btn btn-success form-control" style="height:40px;width:150px;margin-left:75px; margin-top: 25px" onclick="mostrarNuevo()">Ingresar Nuevo</button>
-  
+    <button class="btn btn-info btn-sm form-control " id="btnNuevo" onclick="mostrarNuevo()">Ingresar Nuevo</button>
 </div>
-<hr>
+
 <div class="row">
-
-
-<div class="container col-8" style="margin-left: 75px">
+<div class="container col-11" id="tabla">
   <table class="table" id="myTable">
-    <thead>
+    <thead class="thead-light">
         <tr>
           <th>#</th>
           <th>Cédula</th>
@@ -34,7 +62,6 @@
           <th>Telefono</th>
           <th>Editar</th>
           <th>Eliminar</th>
-
         </tr>
       </thead>
   </table>
@@ -43,13 +70,13 @@
 
 
 <!-- formulario para crear un nuevo empleado -->
-<div class=" container col-4 " id="divNuevo" style="width: 25%">
+<div class=" container col-4" id="divNuevo" style="width: 25%; display:none">
   <button onclick="cerrarNuevo()" style="float:right"  class="btn btn-danger">X</button>
   <input type="hidden" id="key_empleado"  name="key_empleado" value="">
 
     <div class="container" style="float: left;">
-      <h2>Crear Nuevo Empleado</h2>
-      <form  id="js-form" name="js-form">
+      <h2 id="nuevos">Crear Nuevo Empleado</h2>
+
         <div class="form-group">
             <label for="cedula"> Cédula:</label>
             <input type="number" maxlength="13" class="form-control" id="cedula" placeholder="Ingrese la cédula" name="cedula">
@@ -63,251 +90,33 @@
                 <label for="apelido">Apellido:</label>
                 <input type="text" class="form-control" id="apellido" placeholder="Ingrese el apellido" name="apelido">
         </div>
-        <div class="form-group">
-          <label for="correo">Email:</label>
-          <input type="email" class="form-control" id="email" placeholder="Ingrese el email" name="email">
-        </div>
 
+        
         <div class="form-group">
           <label for="email">Telefono:</label>
           <input type="number" maxlength="10" class="form-control" id="telefono"  placeholder="Ingrese el teléfono"  name="telefono">
     
         </div>
 
+        <div class="form-group" id="divEmail">
+          <label for="correo">Email:</label>
+          <input type="email" class="form-control" id="email" placeholder="Ingrese el email" name="email">
+        </div>
+
+        <div class="form-group" id="divPass">
+          <label for="password">Contraseña:</label>
+          <input type="password" class="form-control" id="password" placeholder="Ingrese la contraseña" name="password">
+        </div>
+
         <button  class="btn btn-success" id="btn_insertar" onclick="ejecutarInsert()">Insertar</button>
         <button  class="btn btn-info" id="btn_editar" onclick="ejecutarEditar()">Guardar</button>
 
-      </form>
+
     </div>
     </div>
   </div>
 
-<script>
-var returnArr = [];
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyD84c5uXptNfZa0UcaxvTuVZd2R3eTzvxA",
-    authDomain: "control-7c5d7.firebaseapp.com",
-    databaseURL: "https://control-7c5d7.firebaseio.com",
-    projectId: "control-7c5d7",
-    storageBucket: "control-7c5d7.appspot.com",
-    messagingSenderId: "635319972706"
-  };
-  firebase.initializeApp(config);
-
-
-    const lista = document.getElementById('lista');
-    const dbRef = firebase.database().ref().child('empleados');
-    //dbRef.on('value', snap => holamundo.innerText = snap.val());
-    //console.log(snap.val());
-    //const dbRefLista= dbRef.child('cuenta');
-    dbRef.on('value', snap => {
-  returnArr=[];
-  snap.forEach(function(snap) {
-    console.log('Elemento');
-    var item=snap.val();
-    item.key = snap.key;
-
-     console.log( item);
-     returnArr.push(item);
-
-
-
-  });
-
-
-
-  console.log('Arreglo');
-
-  console.log( returnArr);
-
-
-
-
-  for (i in returnArr) {
-    console.log('Item ['+i+']');
-
-    console.log('Cedula:'+ returnArr[i].cedula);
-
-}
-
-//--------------------------------
-var table= document.getElementById('myTable');
-
-var tableHeaderRowCount = 1;
-var table = document.getElementById('myTable');
-var rowCount = table.rows.length;
-for (var i = tableHeaderRowCount; i < rowCount; i++) {
-    table.deleteRow(tableHeaderRowCount);
-}
-
-
-  for (i in returnArr) {
-    var row = table.insertRow(1);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-    var cell4 = row.insertCell(3);
-    var cell5 = row.insertCell(4);
-    var cell6 = row.insertCell(5);
-    var cell7 = row.insertCell(6);
-    var cell8 = row.insertCell(7);
-
-    cell1.innerHTML = returnArr.length-i;
-    cell2.innerHTML = returnArr[i].cedula;
-    cell3.innerHTML = returnArr[i].nombre;
-    cell4.innerHTML = returnArr[i].apellido;
-    cell5.innerHTML = returnArr[i].email;
-    cell6.innerHTML = returnArr[i].telefono;
-    cell7.innerHTML = "<button onclick='cargar_editar("+i+")'>Editar</button>";
-    cell8.innerHTML = "<button onclick='ejecutar_eliminar(\""+returnArr[i].key+"\")'>Eliminar</button>";
-
-}
-
-
-
- /*const li= document.createElement('li');
-listaUsuarios=JSON.stringify(snap.val());
-
- li.innerText = listaUsuarios;
- lista.appendChild(li);*/
-
-  //console.log(JSON.stringify(snap.val()));
-
-
-});
-
-
-
-// inserta la data en el arbol de firebase 
-function insertar(cedula,apellido,email, nombre, telefono){
-  const dbRef = firebase.database().ref().child('empleados');
-  //dbRef.on('value', snap => holamundo.innerText = snap.val());
-  //console.log(snap.val());
- // const dbRefLista= dbRef.child('cuenta');
-var refnuevo = dbRef.push({
-  cedula: cedula,
-  apellido: apellido,
-  email: email,
-  nombre: nombre,
-  telefono: telefono
-  
-
-});
-// ingresar en la autenticacion el usuario 
-console.log("Obtenuiendo el empleado ingresado a firebase: ");
-console.log(refnuevo);
-
-
-}
-
-function editar(key_empleado,cedula,apellido,email, nombre, telefono){
-  //const dbRef= firebase.database().ref().child('empleados').child(key_empleado);
-  const dbRef = firebase.database().ref('empleados/' + key_empleado);//.child('empleados');
-  //dbRef.on('value', snap => holamundo.innerText = snap.val());
-  //console.log(snap.val());
- // const dbRefLista= dbRef.child('cuenta');
-var refnuevo = dbRef.set({
-  cedula: cedula,
-  apellido: apellido,
-  email: email,
-  nombre: nombre,
-  telefono: telefono
-  
-
-});
-}
-
-function ejecutarEditar(){
-
-var cedula= document.getElementById('cedula').value;
-var apellido= document.getElementById('apellido').value;
-var email = document.getElementById('email').value;
-var nombre = document.getElementById('nombre').value;
-var telefono = document.getElementById('telefono').value;
-var key_empleado= document.getElementById('key_empleado').value;
-    
-
-    
-    editar(key_empleado,cedula,apellido,email, nombre, telefono);
-
-}
-function cargar_editar(posicion){
-
-document.getElementById('cedula').value= returnArr[posicion].cedula;
-document.getElementById('apellido').value= returnArr[posicion].apellido;
-document.getElementById('email').value= returnArr[posicion].email;
-document.getElementById('nombre').value= returnArr[posicion].nombre;
-document.getElementById('telefono').value= returnArr[posicion].telefono;
-document.getElementById('key_empleado').value= returnArr[posicion].key;
-
-    
-
-    
-
-}
-
-
-function ejecutarInsert(){
-  /*
-  apellido:"Marcillo"
-cedula:"1705610689"
-email:"fmarcillo@topesa.com.ec"
-key:"IWBKCFiGgvaitbPtP6YZy5BC5Dp2"
-nombre:"Fabian"
-telefono:"0998334085"
-  */
-  // obtener los datos del formulario 
-var cedula= document.getElementById('cedula').value;
-var apellido= document.getElementById('apellido').value;
-var email = document.getElementById('email').value;
-var nombre = document.getElementById('nombre').value;
-var telefono = document.getElementById('telefono').value;
-
-
-    
-
-    
-insertar(cedula,apellido,email, nombre, telefono);
-
-}
-
-
-//*****************************eliminar
-function ejecutar_eliminar(key_empleado){
-
-if( confirm("Seguro desea eliminar?")){
-  eliminar(key_empleado);
-}
-
-
-}
-function eliminar(key_empleado){
-  const dbRef = firebase.database().ref('empleados/' + key_empleado);//.child('empleados');
-  dbRef.remove();
-}
-//*****************************************
-
-    function fechaDDMMAA(fechaAAMMDD){
-        //2018-01-01 --> 01-01-2018
-        var anio= fechaAAMMDD.substring(0,4);
-        var mes= fechaAAMMDD.substring(5,7);
-        var dia= fechaAAMMDD.substring(8,10);
-        return dia+"-"+mes+"-"+anio;
-        
-    }
-    function mostrarNuevo() {
-    var x = document.getElementById("divNuevo");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-function cerrarNuevo(){
-  document.getElementById('divNuevo').style.display = 'none';
-}
-</script>
+<script src="../js/empleados.js"></script>
 
 <!--<script src="../js/empleados.js"></script>-->
 </body>
