@@ -9,6 +9,7 @@
     crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../CSS/paginas.css">
   <style>
     #map {
       height: 50vh;
@@ -25,40 +26,61 @@
 </head>
 
 <body class="" style="padding: 10px;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="../main.html">
+                        <img src="../images/home.png" width="20" height="20" id="nbarImgMenu" class="d-inline-block" alt="">
+                        Menú
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaEmpleados.html">Empleados</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaVehiculos.html">Vehículos</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaClientes.html">Clientes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="nbar" href="./pantallaVisitas.html">Visitas<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" id="nbarAct" href="./pantallaLocalizaciones.html">Localizaciones<span class="sr-only">(current)</span></a>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item active">
+                    <button class="btn btn-dark" id="nbarLink" onclick="logOut()">
+                      <img src="../images/user.png" width="18" height="18" class="d-inline-block align-top" alt="">
+                      Cerrar Sesión</button>
+                </li>
+            </ul>
+          </div>
+      </nav>
 
-  <h1 id="holamundo">Ubicacion de vehiculos</h1>
+  <h1 id = "titulos">Ubicación de Vehículos</h1>
   <button hidden="hidden" class="btn btn-success form-control" onclick="myFunction()">Cargar</button>
-
-  <hr>
   <div class="row">
-
-
-    <div class="col-6">
-      <div class="container bg-info  rounded" style="padding: 5px;" >
-        <h3>Vehiculo Seleccionado:</h3>
-        <p id="placa_seleccionada"></p>
-      </div>
-      <table class="table" id="myTable" onchange="alert('hola')">
+    <div class="col-12">
+      <table class="table" id="myTable" style="margin-top: 25px" onchange="alert('hola')">
         <thead>
           <tr>
             <th>#</th>
-            <th>lat</th>
-            <th>long</th>
-            <th>power</th>
-            <th>fecha</th>
-            <th>placa</th>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Bateria</th>
+            <th>Fecha</th>
+            <th>Placa</th>
           </tr>
         </thead>
       </table>
     </div>
-    <div class="col-6">
-
-      <div id="map"></div>
-
-    </div>
   </div>
-  <div>
-
+  <div style="margin-top: 50px ; height: 400px">
+      <div id="map" style="height: 400px"></div>
   </div>
 
   <script src="../js/localizaciones.js"></script>

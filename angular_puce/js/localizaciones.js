@@ -83,7 +83,7 @@ dbRef.on('value', snap => {
       cell4.innerHTML = obj_ubicacion.power;
       cell5.innerHTML = returnArr[i].key;
       cell6.innerHTML = obj_ubicacion.power;
-      cell7.innerHTML = "<button onclick='localizar_en_mapa(" + i + ")'>Seguir</button>";
+      cell7.innerHTML = "<button class='btn btn-link' onclick='localizar_en_mapa(" + i + ")'>Seguir</button>";
 
     }
 
@@ -135,6 +135,12 @@ function actualizar_marker(placa_seleccionada,latitud,longitud){
   placa_vehiculo.innerHTML= "Placa: " + placa_seleccionada + " Latitud: "+latitud+" Longitud:"+ longitud;
   //obj_vehiculo;
   localizar_en_mapa_obj(placa_seleccionada,latitud,longitud);
+}
+
+function logOut(){
+  firebase.auth().signOut();
+  //alert("Sesión cerrada.");
+  window.location.href="../login.html";
 }
 //***************************************************/
 function localizar_en_mapa(posicion) {
