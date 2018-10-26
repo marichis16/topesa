@@ -2,12 +2,16 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
   <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
     crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
     crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../CSS/paginas.css">
+
 </head>
 <style>
   /* Set the size of the div element that contains the map */
@@ -129,7 +133,7 @@
       </table>
     </div>
   </div>
-
+  <button  class="btn-info" onclick="generateexcel('myTable')">Exportar Excel</button>
 
 
   <!--script para que funcione el mapa de google -->
@@ -138,6 +142,79 @@
   <div id="map"></div>
   <script src="../js/visitas.js">
   </script>
+<script>
+function fnExcelReport(idTable)
+{
+    var tab_text=" <table border='2px'><tr bgcolor='#87AFC6'>";
+    var textRange; var j=0;
+    tab = document.getElementById(idTable); // id of table
+
+    for(j = 0 ; j < tab.rows.length ; j++) 
+    {     
+        tab_text=tab_text+  encodeHTML(tab.rows[j].innerHTML)+"</tr>";
+        //tab_text=tab_text+"</tr>";
+    }
+
+    tab_text=tab_text+"</table>";
+    console.log("texto tabla");
+    console.log(tab_text);
+    tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
+    tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE "); 
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("txt/html","replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus(); 
+        sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xls");
+    }  
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
+
+    return (sa);
+}
+
+function generateexcel(tableid) {
+ // $(tableid+' tr').find('td:eq(7),th:eq(7)').remove();
+  var table= document.getElementById(tableid);
+  var html = table.outerHTML;
+
+  //add more symbols if needed...
+  
+  while (html.indexOf('á') != -1) html = html.replace('á', '&aacute;');
+  while (html.indexOf('é') != -1) html = html.replace('é', '&eacute;');
+  while (html.indexOf('í') != -1) html = html.replace('í', '&iacute;');
+  while (html.indexOf('ó') != -1) html = html.replace('ó', '&oacute;');
+  while (html.indexOf('ú') != -1) html = html.replace('ú', '&uacute;');
+  while (html.indexOf('º') != -1) html = html.replace('º', '&ordm;');
+  while (html.indexOf('ñ') != -1) html = html.replace('º', '&ntilde;');
+
+  window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html));
+}
+
+
+function encodeHTML(str){
+ var aStr = str.split(''),
+     i = aStr.length,
+     aRet = [];
+
+   while (--i) {
+    var iC = aStr[i].charCodeAt();
+    if (iC < 65 || iC > 127 || (iC>90 && iC<97)) {
+      aRet.push('&#'+iC+';');
+    } else {
+      aRet.push(aStr[i]);
+    }
+  }
+ return aRet.reverse().join('');
+}
+
+</script>
 
 </body>
 
