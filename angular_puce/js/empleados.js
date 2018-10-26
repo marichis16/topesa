@@ -138,12 +138,8 @@ function createUser(cedula,apellido,email, nombre, telefono, pass){
 
 
 function editar(key_empleado,cedula,apellido,email, nombre, telefono){
-//const dbRef= firebase.database().ref().child('empleados').child(key_empleado);
   
 const dbRef = firebase.database().ref('empleados/' + key_empleado);//.child('empleados');
-//dbRef.on('value', snap => holamundo.innerText = snap.val());
-//console.log(snap.val());
-// const dbRefLista= dbRef.child('cuenta');
   var refnuevo = dbRef.set({
     cedula: cedula,
     apellido: apellido,
