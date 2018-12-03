@@ -83,15 +83,6 @@ for (i in returnArr) {
 
 
 
-/*const li= document.createElement('li');
-listaUsuarios=JSON.stringify(snap.val());
-
-li.innerText = listaUsuarios;
-lista.appendChild(li);*/
-
-//console.log(JSON.stringify(snap.val()));
-
-
 });
 
 
@@ -109,7 +100,7 @@ function insertar(cedula,apellido,email, nombre, telefono, userID){
     telefono: telefono
   });
 
-  alert("Empleado creado correctamente");
+  alert("Empleado creado correctamente"); 
   console.log("Obteniendo el empleado ingresado a firebase: ");
   console.log(refnuevo);
   mostrarNuevo();

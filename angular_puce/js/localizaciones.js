@@ -82,7 +82,6 @@ dbRef.on('value', snap => {
       cell3.innerHTML = obj_ubicacion.lng;
       cell4.innerHTML = obj_ubicacion.power;
       cell5.innerHTML = returnArr[i].key;
-      cell6.innerHTML = obj_ubicacion.power;
       cell7.innerHTML = "<button class='btn btn-link' onclick='localizar_en_mapa(" + i + ")'>Seguir</button>";
 
     }
