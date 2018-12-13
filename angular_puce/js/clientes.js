@@ -39,7 +39,7 @@ var returnArr = [];
   for (i in returnArr) {
     console.log('Item ['+i+']');
 
-    console.log('Cedula:'+ returnArr[i].cedula);
+    console.log('RUC:'+ returnArr[i].ruc);
 
 }
 
@@ -66,6 +66,8 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     var cell8 = row.insertCell(7);
     var cell9 = row.insertCell(8);
     var cell10 = row.insertCell(9);
+    var cell11 = row.insertCell(10);
+    var cell12 = row.insertCell(11);
 
 /*
 
@@ -80,6 +82,8 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     cell8.innerHTML = returnArr[i].email;
     cell9.innerHTML = "<img src='"+returnArr[i].imagenURI+"' width='100' heigth='100' >";
     cell10.innerHTML = "<a  target='_blank' href='https://www.google.com/maps/?q="+returnArr[i].lat+","+returnArr[i].lng+"' >Ubicacion</a>";
+    cell11.innerHTML = "<button class='btn btn-link' onclick='cargar_editar("+i+")'>Editar</button>";
+    cell12.innerHTML = "<button class='btn btn-link' onclick='ejecutar_eliminar(\""+returnArr[i].key+"\")'>Eliminar</button>";
 }
 
 
@@ -95,52 +99,89 @@ listaUsuarios=JSON.stringify(snap.val());
 
 });
 
-
-function myFunction() {
-var table= document.getElementById('myTable');
-
-var elmtTable = document.getElementById('myTable');
-var tableRows = elmtTable.getElementsByTagName('tr');
-var rowCount = tableRows.length;
-
-for (var x=rowCount-1; x>0; x--) {
-   elmtTable.removeChild(tableRows[x]);
-}
-
-  for (i in returnArr) {
-    var row = table.insertRow(1);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-    var cell4 = row.insertCell(3);
-    var cell5 = row.insertCell(4);
-    var cell6 = row.insertCell(5);
-    var cell7 = row.insertCell(6);
-    var cell8 = row.insertCell(7);
-
-    cell1.innerHTML = i;
-    cell2.innerHTML = returnArr[i].cedula;
-    cell3.innerHTML = returnArr[i].nombre;
-    cell4.innerHTML = returnArr[i].codigocuenta;
-    cell5.innerHTML = returnArr[i].correo;
-    cell6.innerHTML = returnArr[i].fecha;
-    cell7.innerHTML = returnArr[i].activa;
-    cell8.innerHTML = returnArr[i].enuso;
-
-
-
-  //  console.log('Cedula:'+ returnArr[i].cedula);
-
-}
-
-
-}
-
-
 // ingresar en la autenticacion el usuario 
-console.log("Obtenuiendo el usuario ingresado a firebase: ");
-console.log(refnuevo);
 
+
+function cargar_editar(posicion){
+
+  document.getElementById('ruc').value= returnArr[posicion].ruc;
+  document.getElementById('nombre').value= returnArr[posicion].nombre;
+  document.getElementById('responsable').value= returnArr[posicion].responsable;
+  document.getElementById('direccion').value= returnArr[posicion].direccion;
+  document.getElementById('telefono').value= returnArr[posicion].telefono;
+  document.getElementById('celular').value= returnArr[posicion].celular;
+  document.getElementById('email').value= returnArr[posicion].email;
+  document.getElementById('imagenURI').value= returnArr[posicion].imagenURI;
+  document.getElementById('lat').value= returnArr[posicion].lat;
+  document.getElementById('lng').value= returnArr[posicion].lng;
+  document.getElementById('key_cliente').value= returnArr[posicion].key;
+
+  mostrarExistente();
+}
+
+function ejecutarEditar(){
+
+  var ruc= document.getElementById('ruc').value;
+  var nombre= document.getElementById('nombre').value;
+  var responsable = document.getElementById('responsable').value;
+  var direccion = document.getElementById('direccion').value;
+  var telefono = document.getElementById('telefono').value;
+  var celular = document.getElementById('celular').value;
+  var email = document.getElementById('email').value;
+  var imagenURI = document.getElementById('imagenURI').value;
+  var lat = document.getElementById('lat').value;
+  var lng = document.getElementById('lng').value;
+  var key_cliente= document.getElementById('key_cliente').value;
+    
+  editar(key_cliente,ruc,nombre,responsable, direccion, telefono, celular,email, imagenURI, lat, lng);
+
+}
+
+function editar(key_cliente,ruc,nombre,responsable, direccion, telefono, celular, email, imagenURI, lat, lng){
+  
+  const dbRef = firebase.database().ref('clientes/' + key_cliente);//.child('empleados');
+    var refnuevo = dbRef.set({
+      ruc: ruc,
+      nombre: nombre,
+      responsable: responsable,
+      direccion: direccion,
+      telefono: telefono,
+      celular: celular,
+      email: email,
+      imagenURI: imagenURI,
+      lat: lat,
+      lng: lng
+    });
+    alert("Guardado con éxito"); 
+  }
+
+  function ejecutar_eliminar(key_cliente){
+    if( confirm("Seguro desea eliminar?")){
+      eliminar(key_cliente);
+    }
+  }
+  function eliminar(key_cliente){
+    const dbRef = firebase.database().ref('clientes/' + key_cliente);//.child('empleados');
+    dbRef.remove();
+  }
+
+function mostrarExistente(){
+  document.getElementById("divNuevo").style.display = "block";
+  document.getElementById('btn_editar').style.display = 'block'; 
+}
+
+function limit(element)
+{
+    var max_chars = 9;
+
+    if(element.value.length > max_chars) {
+        element.value = element.value.substring(0, max_chars);
+    }
+}
+
+function cerrar(){
+  document.getElementById('divNuevo').style.display = 'none';
+}
 
 function fechaDDMMAA(fechaAAMMDD){
     //2018-01-01 --> 01-01-2018

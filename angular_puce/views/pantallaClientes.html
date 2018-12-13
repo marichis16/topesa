@@ -45,6 +45,7 @@
       </nav>
 
   <h1 id = "titulos">Clientes</h1>
+
 <div class="row">
 
 
@@ -66,6 +67,61 @@
       </thead>
   </table>
   </div>
+  <div class=" container col-4" id="divNuevo" style="width: 25%; display:none">
+    <button onclick="cerrar()" style="float:right"  class="btn btn-danger">X</button>
+    <input type="hidden" id="key_cliente"  name="key_cliente" value="">
+  
+      <div class="container" style="float: left;">
+        <h2 id="nuevos">Editar Cliente</h2>
+  
+          <div class="form-group">
+              <label for="ruc"> RUC:</label>
+              <input  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+              type = "number" maxlength = "15" class="form-control" id="ruc" placeholder="Ingrese el RUC" name="ruc">
+          </div>
+          <div class="form-group">
+              
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre" name="nombre">
+          </div>
+          <div class="form-group">
+                  <label for="responsable">Responsable:</label>
+                  <input type="text" class="form-control" id="responsable" placeholder="Ingrese el responsable" name="responsable">
+          </div>
+          <div class="form-group">
+            <label for="direccion">Dirección:</label>
+            <input type="text" class="form-control" id="direccion"  placeholder="Ingrese la dirección"  name="direccion">
+          </div>
+          <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+            type = "number" maxlength = "9" class="form-control" id="telefono"  placeholder="Ingrese el teléfono"  name="telefono">
+          </div>
+          <div class="form-group">
+            <label for="celular">Celular:</label>
+            <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+            type = "number" maxlength = "10" class="form-control" id="celular"  placeholder="Ingrese el celular"  name="celular">
+          </div>
+          <div class="form-group" id="divEmail">
+            <label for="correo">Email:</label>
+            <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control" id="email" placeholder="Ingrese el email" name="email">
+          </div>
+          <div class="form-group" style="display:none" >
+            <label for="imagenURI">imagenURI">Dirección:</label>
+            <input type="text" class="form-control" id="imagenURI" name="imagenURI">
+          </div>
+          <div class="form-group" style="display:none" >
+            <label for="lat">lat:</label>
+            <input type="text" class="form-control" id="lat"  name="lat">
+          </div>
+          <div class="form-group" style="display:none" >
+            <label for="lng">lng:</label>
+            <input type="text" class="form-control" id="lng" name="lng">
+          </div>
+          <button  class="btn btn-info" id="btn_editar" onclick="ejecutarEditar()">Guardar</button>
+      </div>
+      </div>
+    </div>
   </div>
   <script src="../js/clientes.js"></script>
 </body>
