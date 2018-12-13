@@ -106,9 +106,17 @@
             <label for="correo">Email:</label>
             <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control" id="email" placeholder="Ingrese el email" name="email">
           </div>
-          <div class="form-group" style="display:none" >
-            <label for="imagenURI">imagenURI">Dirección:</label>
+          <div class="form-group" id="divImagen">
+            <label for="imagen">Imagen:</label>
+            <img id="imagen" width="150" height="150">
+          </div>
+          <div class="form-group" style="display:none">
+            <label for="imagenURI">imagenURI">URL:</label>
             <input type="text" class="form-control" id="imagenURI" name="imagenURI">
+          </div>
+          <div class="form-group"  >
+            <progress value="0" max="100" id="uploader">0%</progress>
+            <input type="file"  value="upload" id="btnImagen" accept="image/*" />
           </div>
           <div class="form-group" style="display:none" >
             <label for="lat">lat:</label>

@@ -81,7 +81,7 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     cell7.innerHTML = returnArr[i].celular;
     cell8.innerHTML = returnArr[i].email;
     cell9.innerHTML = "<img src='"+returnArr[i].imagenURI+"' width='100' heigth='100' >";
-    cell10.innerHTML = "<a  target='_blank' href='https://www.google.com/maps/?q="+returnArr[i].lat+","+returnArr[i].lng+"' >Ubicacion</a>";
+    cell10.innerHTML = "<a class='btn btn-link' target='_blank' href='https://www.google.com/maps/?q="+returnArr[i].lat+","+returnArr[i].lng+"' >Ubicacion</a>";
     cell11.innerHTML = "<button class='btn btn-link' onclick='cargar_editar("+i+")'>Editar</button>";
     cell12.innerHTML = "<button class='btn btn-link' onclick='ejecutar_eliminar(\""+returnArr[i].key+"\")'>Eliminar</button>";
 }
@@ -112,6 +112,7 @@ function cargar_editar(posicion){
   document.getElementById('celular').value= returnArr[posicion].celular;
   document.getElementById('email').value= returnArr[posicion].email;
   document.getElementById('imagenURI').value= returnArr[posicion].imagenURI;
+  document.getElementById('imagen').src= returnArr[posicion].imagenURI;
   document.getElementById('lat').value= returnArr[posicion].lat;
   document.getElementById('lng').value= returnArr[posicion].lng;
   document.getElementById('key_cliente').value= returnArr[posicion].key;
@@ -170,14 +171,35 @@ function mostrarExistente(){
   document.getElementById('btn_editar').style.display = 'block'; 
 }
 
-function limit(element)
-{
-    var max_chars = 9;
+var uploader = document.getElementById('uploader');
+var btnImagen = document.getElementById('btnImagen');
 
-    if(element.value.length > max_chars) {
-        element.value = element.value.substring(0, max_chars);
+btnImagen.addEventListener('change', function(e){
+  var imagen = e.target.files[0];
+
+  var storageRef= firebase.storage().ref('clientes/'+imagen.name);
+
+  var task= storageRef.put(imagen);
+  task.on('state_changed',
+    function progress(snapshot){
+      var porcentaje =(snapshot.bytesTransferred / snapshot.totalBytes)*100;
+      uploader.value = porcentaje;
+    },
+    function error (err){
+
+    },
+    function (){
+      task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        console.log('File available at', downloadURL);
+        document.getElementById('imagen').src= downloadURL;
+        document.getElementById('imagenURI').value= "";
+        document.getElementById('imagenURI').value= downloadURL;
+      });
+
+
     }
-}
+  );
+});
 
 function cerrar(){
   document.getElementById('divNuevo').style.display = 'none';
