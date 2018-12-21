@@ -81,7 +81,7 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     cell7.innerHTML = returnArr[i].celular;
     cell8.innerHTML = returnArr[i].email;
     cell9.innerHTML = "<img src='"+returnArr[i].imagenURI+"' width='100' heigth='100' >";
-    cell10.innerHTML = "<a class='btn btn-link' target='_blank' href='https://www.google.com/maps/?q="+returnArr[i].lat+","+returnArr[i].lng+"' >Ubicacion</a>";
+    cell10.innerHTML = "<button class='btn btn-link' onclick='verUbicacionMapa(" + i + ")'>Ver en mapa</button>";
     cell11.innerHTML = "<button class='btn btn-link' onclick='cargar_editar("+i+")'>Editar</button>";
     cell12.innerHTML = "<button class='btn btn-link' onclick='ejecutar_eliminar(\""+returnArr[i].key+"\")'>Eliminar</button>";
 }
@@ -104,6 +104,7 @@ listaUsuarios=JSON.stringify(snap.val());
 
 function cargar_editar(posicion){
 
+  cerrarMapa();
   document.getElementById('ruc').value= returnArr[posicion].ruc;
   document.getElementById('nombre').value= returnArr[posicion].nombre;
   document.getElementById('responsable').value= returnArr[posicion].responsable;
@@ -150,8 +151,8 @@ function editar(key_cliente,ruc,nombre,responsable, direccion, telefono, celular
       celular: celular,
       email: email,
       imagenURI: imagenURI,
-      lat: lat,
-      lng: lng
+      lat: parseFloat(lat),
+      lng: parseFloat(lng)
     });
     alert("Guardado con éxito"); 
   }
@@ -201,9 +202,44 @@ btnImagen.addEventListener('change', function(e){
   );
 });
 
+function verUbicacionMapa(posicion) {
+
+  document.getElementById('divMapa').style.display = 'block'; 
+
+  initMap();
+
+  console.log(returnArr[posicion]);
+  latitud = returnArr[posicion].lat;
+  longitud = returnArr[posicion].lng;
+  nombre = returnArr[posicion].nombre;
+  var lugar= {
+    lat: latitud,
+    lng: longitud
+  };
+  // zoom al mapa
+  map = new google.maps.Map(
+    document.getElementById('map'), {
+      zoom: 20,
+      center: lugar
+    });
+
+  console.log(lugar);
+  
+  marker = new google.maps.Marker({
+    position: lugar,
+    label: "" + nombre,
+    map: map
+  });
+
+}
+
 function cerrar(){
   document.getElementById('divNuevo').style.display = 'none';
 }
+function cerrarMapa(){
+  document.getElementById('divMapa').style.display = 'none';
+}
+
 
 function fechaDDMMAA(fechaAAMMDD){
     //2018-01-01 --> 01-01-2018

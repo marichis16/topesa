@@ -131,7 +131,7 @@ listaUsuarios=JSON.stringify(snap.val());
 
 function actualizar_marker(placa_seleccionada,latitud,longitud){
   var placa_vehiculo = document.getElementById('placa_seleccionada');
-  placa_vehiculo.innerHTML= "Placa: " + placa_seleccionada + " Latitud: "+latitud+" Longitud:"+ longitud;
+  //placa_vehiculo.innerHTML= "Placa: " + placa_seleccionada + " Latitud: "+latitud+" Longitud:"+ longitud;
   //obj_vehiculo;
   localizar_en_mapa_obj(placa_seleccionada,latitud,longitud);
 }

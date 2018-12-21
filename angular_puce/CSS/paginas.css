@@ -15,7 +15,6 @@
     font-size: 14px;
     text-align: center;
     margin-top: 2px;
-    margin-left: 10px;
 }
 #nbarAct{
     color:white;
@@ -42,7 +41,6 @@
     margin-top: 25px
 }
 #tabla{
-    margin-left: 25px;
     margin-top: 25px;
 }
 th, td{

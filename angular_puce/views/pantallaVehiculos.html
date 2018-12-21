@@ -105,7 +105,8 @@
 
         <div class="form-group">
             <label for="anio">Año:</label>
-            <input type="number" class="form-control" id="anio"  placeholder="Ingrese el año"  name="anio">
+            <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+            type = "number" maxlength = "4" class="form-control" id="anio"  placeholder="Ingrese el año"  name="anio">
       
         </div>
 

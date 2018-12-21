@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="../CSS/paginas.css">
 </head>
-<body >
+  <style>
+    /* Set the size of the div element that contains the map */
+    #map {
+      height: 400px;
+      /* The height is 400 pixels */
+      width: 100%;
+      /* The width is the width of the web page */
+    }
+  </style>
+  <script>
+    var map;
+    var marker;  
+  </script>
+
+
+<body class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-dark">
         <div class="container-fluid">
             <ul class="nav navbar-nav">
@@ -45,11 +62,38 @@
       </nav>
 
   <h1 id = "titulos">Clientes</h1>
-
 <div class="row">
-
-
-<div class="col-sm-10" id="tabla">
+    <script>
+        // Initialize and add the map
+        function initMap() {
+          // The location of Uluru
+          var uluru = {
+            lat: -0.209807,
+            lng: -78.491362
+          };
+          // The map, centered at Uluru
+          var map = new google.maps.Map(
+            document.getElementById('map'), {
+              zoom: 15,
+              center: uluru
+            });
+          // The marker, positioned at Uluru
+          var marker = new google.maps.Marker({
+            position: uluru,
+            map: map
+          });
+        }
+      </script>
+      <!--Load the API from the specified URL
+        * The async attribute allows the browser to render the page while the API loads
+        * The key parameter will contain your own API key (which is not needed for this tutorial)
+        * The callback parameter executes the initMap() function
+        -->
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDr0u1SZQWsC8yQ9vaB7uSHS6hk0OzR1oo&callback=initMap">
+      </script>
+</div>
+<div class="row">
+<div class="col-sm-8" id="tabla">
   <table class="table" id="myTable">
     <thead>
         <tr>
@@ -67,7 +111,7 @@
       </thead>
   </table>
   </div>
-  <div class=" container col-4" id="divNuevo" style="width: 25%; display:none">
+  <div class=" container col-4" id="divNuevo" style="display:none">
     <button onclick="cerrar()" style="float:right"  class="btn btn-danger">X</button>
     <input type="hidden" id="key_cliente"  name="key_cliente" value="">
   
@@ -130,7 +174,11 @@
       </div>
       </div>
     </div>
-  </div>
+    <div id="divMapa" style="display:none" >
+        <h3>MAPA</h3>
+        <button onclick="cerrarMapa()" style="float:right"  class="btn btn-danger">X</button>
+        <div id="map"></div>
+    </div>
   <script src="../js/clientes.js"></script>
 </body>
 </html>
