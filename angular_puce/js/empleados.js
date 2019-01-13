@@ -1,6 +1,7 @@
-
+// ---------------- Variables ----------------
 var returnArr = [];
-// Initialize Firebase
+
+// ---------------- Inicializa Firebase ----------------
 var config = {
   apiKey: "AIzaSyD84c5uXptNfZa0UcaxvTuVZd2R3eTzvxA",
   authDomain: "control-7c5d7.firebaseapp.com",
@@ -10,105 +11,86 @@ var config = {
   messagingSenderId: "635319972706"
 };
 firebase.initializeApp(config);
+
+// ---------------- Inicializa las bases ----------------
 var db = firebase.database();
 var auth = firebase.auth();
+const lista = document.getElementById('lista');
+const dbRef_empleados = firebase.database().ref().child('empleados');
 
-  const lista = document.getElementById('lista');
-  const dbRef = firebase.database().ref().child('empleados');
-  //dbRef.on('value', snap => holamundo.innerText = snap.val());
-  //console.log(snap.val());
-  //const dbRefLista= dbRef.child('cuenta');
-  dbRef.on('value', snap => {
-returnArr=[];
-snap.forEach(function(snap) {
-  console.log('Elemento');
-  var item=snap.val();
-  item.key = snap.key;
-
-   console.log( item);
-   returnArr.push(item);
-
-
-
-});
-
-
-
-console.log('Arreglo');
-
-console.log( returnArr);
-
-
-
-
-for (i in returnArr) {
-  console.log('Item ['+i+']');
-
-  console.log('Cedula:'+ returnArr[i].cedula);
-
-}
-
-//--------------------------------
-var table= document.getElementById('myTable');
-
-var tableHeaderRowCount = 1;
-var table = document.getElementById('myTable');
-var rowCount = table.rows.length;
-for (var i = tableHeaderRowCount; i < rowCount; i++) {
-  table.deleteRow(tableHeaderRowCount);
-}
-
-
-for (i in returnArr) {
-  var row = table.insertRow(1);
-  var cell1 = row.insertCell(0);
-  var cell2 = row.insertCell(1);
-  var cell3 = row.insertCell(2);
-  var cell4 = row.insertCell(3);
-  var cell5 = row.insertCell(4);
-  var cell6 = row.insertCell(5);
-  var cell7 = row.insertCell(6);
-  var cell8 = row.insertCell(7);
-
-  cell1.innerHTML = returnArr.length-i;
-  cell2.innerHTML = returnArr[i].cedula;
-  cell3.innerHTML = returnArr[i].nombre;
-  cell4.innerHTML = returnArr[i].apellido;
-  cell5.innerHTML = returnArr[i].email;
-  cell6.innerHTML = returnArr[i].telefono;
-  cell7.innerHTML = "<button class='btn btn-link' onclick='cargar_editar("+i+")'>Editar</button>";
-  cell8.innerHTML = "<button class='btn btn-link' onclick='ejecutar_eliminar(\""+returnArr[i].key+"\")'>Eliminar</button>";
-
-}
-
-
-
-});
-
-
-
-// inserta la data en el arbol de firebase 
-function insertar(cedula,apellido,email, nombre, telefono, userID){
-
-
-  const dbRef = firebase.database().ref().child('empleados').child(userID);
-  var refnuevo = dbRef.set({
-    cedula: cedula,
-    apellido: apellido,
-    email: email,
-    nombre: nombre,
-    telefono: telefono
+dbRef_empleados.on('value', snap => {
+  returnArr=[];
+  snap.forEach(function(snap) {
+    console.log('Elemento');
+    var item=snap.val();
+    item.key = snap.key;
+    console.log( item);
+    returnArr.push(item);
   });
 
-  alert("Empleado creado correctamente"); 
-  console.log("Obteniendo el empleado ingresado a firebase: ");
-  console.log(refnuevo);
-  mostrarNuevo();
+  console.log('Arreglo');
+  console.log( returnArr);
+
+
+  //Llena tabla
+  var table= document.getElementById('myTable');
+  var tableHeaderRowCount = 1;
+  var rowCount = table.rows.length;
+  for (var i = tableHeaderRowCount; i < rowCount; i++) {
+    table.deleteRow(tableHeaderRowCount);
+  }
+
+  for (i in returnArr) {
+    var row = table.insertRow(1);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    var cell5 = row.insertCell(4);
+    var cell6 = row.insertCell(5);
+    var cell7 = row.insertCell(6);
+    var cell8 = row.insertCell(7);
+
+    cell1.innerHTML = returnArr.length-i;
+    cell2.innerHTML = returnArr[i].cedula;
+    cell3.innerHTML = returnArr[i].nombre;
+    cell4.innerHTML = returnArr[i].apellido;
+    cell5.innerHTML = returnArr[i].email;
+    cell6.innerHTML = returnArr[i].telefono;
+    cell7.innerHTML = "<button class='btn btn-link' onclick='cargarEditar("+i+")'>Editar</button>";
+    cell8.innerHTML = "<button class='btn btn-link' onclick='ejecutarEliminar(\""+returnArr[i].key+"\")'>Eliminar</button>";
+  }
+});
+
+
+// ---------------- Ejecuta Insert ----------------
+function ejecutarInsert(){
+
+  var cedula= document.getElementById('cedula').value;
+  var apellido= document.getElementById('apellido').value;
+  var email = document.getElementById('email').value;
+  var nombre = document.getElementById('nombre').value;
+  var telefono = document.getElementById('telefono').value;
+  var password = document.getElementById('password').value;
+
+  if(cedula != "" && nombre != "" && apellido != "" && email != "" && telefono != "" && password != ""){
+    if(validar()){
+      if (verificarRepeticion()){
+        //alert("Cedula válida");
+        createUser(cedula,apellido,email, nombre, telefono, password);
+      }
+      else
+        alert("La cédula de identificación ya existe.");
+    }
+    else
+      alert("Cédula inválida.");
+  } 
+  else
+    alert("Ingrese todos los campos.");
 }
 
-
+// ---------------- Crea un nuevo usuario ----------------
 function createUser(cedula,apellido,email, nombre, telefono, pass){
-  
   const password = pass;
   var userId="";
   
@@ -123,37 +105,27 @@ function createUser(cedula,apellido,email, nombre, telefono, pass){
         alert(error.message);
         console.log(error.message);
     });
-
-
 }
 
-
-function editar(key_empleado,cedula,apellido,email, nombre, telefono){
-  
-const dbRef = firebase.database().ref('empleados/' + key_empleado);//.child('empleados');
-  var refnuevo = dbRef.set({
+// ---------------- Ingresa los datos ----------------
+function insertar(cedula,apellido,email, nombre, telefono, userID){
+  const dbRef_empleados = firebase.database().ref().child('empleados').child(userID);
+  var refnuevo = dbRef_empleados.set({
     cedula: cedula,
     apellido: apellido,
     email: email,
     nombre: nombre,
     telefono: telefono
   });
+
+  alert("Empleado creado correctamente"); 
+  console.log("Empleado ingresado a firebase: ");
+  console.log(refnuevo);
+  mostrarNuevo();
 }
 
-function ejecutarEditar(){
-
-  var cedula= document.getElementById('cedula').value;
-  var apellido= document.getElementById('apellido').value;
-  var email = document.getElementById('email').value;
-  var nombre = document.getElementById('nombre').value;
-  var telefono = document.getElementById('telefono').value;
-  var key_empleado= document.getElementById('key_empleado').value;
-    
-  editar(key_empleado,cedula,apellido,email, nombre, telefono);
-
-}
-
-function cargar_editar(posicion){
+// ---------------- Carga datos para editar ----------------
+function cargarEditar(posicion){
 
   document.getElementById('cedula').value= returnArr[posicion].cedula;
   document.getElementById('apellido').value= returnArr[posicion].apellido;
@@ -165,57 +137,105 @@ function cargar_editar(posicion){
   mostrarExistente();
 }
 
-
-function ejecutarInsert(){
-/*
-apellido:"Marcillo"
-cedula:"1705610689"
-email:"fmarcillo@topesa.com.ec"
-key:"IWBKCFiGgvaitbPtP6YZy5BC5Dp2"
-nombre:"Fabian"
-telefono:"0998334085"
-*/
-// obtener los datos del formulario 
-
+// ---------------- Ejecuta Editar ----------------
+function ejecutarEditar(){
 
   var cedula= document.getElementById('cedula').value;
   var apellido= document.getElementById('apellido').value;
   var email = document.getElementById('email').value;
   var nombre = document.getElementById('nombre').value;
   var telefono = document.getElementById('telefono').value;
-  var password = document.getElementById('password').value;
-
-  createUser(cedula,apellido,email, nombre, telefono, password);
-
+  var key_empleado= document.getElementById('key_empleado').value;
+  
+  if(cedula != "" && nombre != "" && apellido != "" && email != "" && telefono != ""){
+    if(validar()){
+        editar(key_empleado,cedula,apellido,email, nombre, telefono);
+    }
+    else
+      alert("Cedula inválida");
+  }
+  else
+    alert("Ingrese todos los campos.");
 }
 
+// ---------------- Edita en la base ----------------
+function editar(key_empleado,cedula,apellido,email, nombre, telefono){
+  
+  const dbRef_empleados = firebase.database().ref('empleados/' + key_empleado);
+  var refnuevo = dbRef_empleados.set({
+    cedula: cedula,
+    apellido: apellido,
+    email: email,
+    nombre: nombre,
+    telefono: telefono
+  });
+  alert("Guardado con éxito.");
+}
 
-//*****************************eliminar
-function ejecutar_eliminar(key_empleado){
+// ---------------- Ejecuta Eliminar ----------------
+function ejecutarEliminar(key_empleado){
   if( confirm("Seguro desea eliminar?")){
     eliminar(key_empleado);
   }
 }
-function eliminar(key_empleado){
-  const dbRef = firebase.database().ref('empleados/' + key_empleado);//.child('empleados');
-  dbRef.remove();
-}
-//*****************************************
 
-  function fechaDDMMAA(fechaAAMMDD){
-      //2018-01-01 --> 01-01-2018
-      var anio= fechaAAMMDD.substring(0,4);
-      var mes= fechaAAMMDD.substring(5,7);
-      var dia= fechaAAMMDD.substring(8,10);
-      return dia+"-"+mes+"-"+anio;
-      
+// ---------------- Elimina de la base ----------------
+function eliminar(key_empleado){
+  const dbRef_empleados = firebase.database().ref('empleados/' + key_empleado);//.child('empleados');
+  dbRef_empleados.remove();
+}
+
+// ---------------- Valida la cédula ----------------
+function validar() {
+  var ced = document.getElementById('cedula').value.trim();
+  var total = 0;
+  var longitud = ced.length;
+  var longcheck = longitud - 1;
+
+  if (ced !== "" && longitud === 10){
+    for(i = 0; i < longcheck; i++){
+      if (i%2 === 0) {
+        var aux = ced.charAt(i) * 2;
+        if (aux > 9) aux -= 9;
+        total += aux;
+      } 
+      else 
+        total += parseInt(ced.charAt(i)); 
+    }
+
+    total = total % 10 ? 10 - total % 10 : 0;
+
+    if (ced.charAt(longitud-1) == total) 
+      return true;
+    else
+      return false;
   }
-  function mostrarNuevo() {
+}
+
+// ---------------- Verifica repetición de cédula ----------------
+function verificarRepeticion (){
+  var ced = document.getElementById('cedula').value.trim();
+  var verifica = true;
+
+  console.log('Arreglo de empleados');
+  console.log( returnArr);
+
+    for (i in returnArr) {
+      if(ced == returnArr[i].cedula){
+        verifica = false;
+        break;
+      }
+    }
+  return verifica;
+}
+
+// ---------------- Formulario nuevo registro ----------------
+function mostrarNuevo() {
   var x = document.getElementById("divNuevo");
   if (x.style.display === "none") {
       x.style.display = "block";
-      document.getElementById('btn_insertar').style.display = 'block'; 
-      document.getElementById('btn_editar').style.display = 'none'; 
+      document.getElementById('btnInsertar').style.display = 'block'; 
+      document.getElementById('btnEditar').style.display = 'none'; 
       document.getElementById('divEmail').style.display = 'block'; 
       document.getElementById('divPass').style.display = 'block'; 
 
@@ -231,17 +251,21 @@ function eliminar(key_empleado){
   }
 }
 
+// ---------------- Formulario registro existente ----------------
 function mostrarExistente(){
   document.getElementById("divNuevo").style.display = "block";
-  document.getElementById('btn_insertar').style.display = 'none'; 
-  document.getElementById('btn_editar').style.display = 'block'; 
+  document.getElementById('btnInsertar').style.display = 'none'; 
+  document.getElementById('btnEditar').style.display = 'block'; 
   document.getElementById('divEmail').style.display = 'none'; 
   document.getElementById('divPass').style.display = 'none'; 
 }
+
+// ---------------- Cierra Formulario ----------------
 function cerrarNuevo(){
   document.getElementById('divNuevo').style.display = 'none';
 }
 
+// ---------------- Cierra Sesión ----------------
 function logOut(){
   firebase.auth().signOut();
   //alert("Sesión cerrada.");

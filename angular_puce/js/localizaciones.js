@@ -1,12 +1,12 @@
+// ---------------- Variables ----------------
 var returnArr = [];
-// vehiculo seleccionado 
-var latitud_vehiculo;
-var longitud_vehiculo;
-var placa_vehiculo;
-var obj_vehiculo;
-var marker_vehiculo;
-// Initialize Firebase
+var latitudVehiculo;
+var longitudVehiculo;
+var placaVehiculo;
+var objVehiculo;
+var markerVehiculo;
 
+// ---------------- Inicializa Firebase ----------------
 var config = {
   apiKey: "AIzaSyD84c5uXptNfZa0UcaxvTuVZd2R3eTzvxA",
   authDomain: "control-7c5d7.firebaseapp.com",
@@ -17,13 +17,10 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
+// ---------------- Inicializa las bases ----------------
 const lista = document.getElementById('lista');
-const dbRef = firebase.database().ref().child('localizaciones');
-//dbRef.on('value', snap => holamundo.innerText = snap.val());
-//console.log(snap.val());
-// const dbRefLista= dbRef.child('clientes');
-dbRef.on('value', snap => {
+const dbRef_localizaciones = firebase.database().ref().child('localizaciones');
+dbRef_localizaciones.on('value', snap => {
   returnArr = [];
   snap.forEach(function (snap) {
     console.log('Elemento');
@@ -32,17 +29,12 @@ dbRef.on('value', snap => {
 
     console.log(item);
     returnArr.push(item);
-
-
-
   });
-
-
 
   console.log('Arreglo');
   console.log(returnArr);
 
-  //--------------------------------
+  //Llena tabla
   var table = document.getElementById('myTable');
   var cont = 0;
 
@@ -53,20 +45,11 @@ dbRef.on('value', snap => {
     table.deleteRow(tableHeaderRowCount);
   }
 
-
   for (i in returnArr) {
-
-
-    /*
-
-    */
-    //cell2.innerHTML = returnArr[i].lat;
-
-    // solo obtener el ultimo 
     if (returnArr[i].length > 0) {
-      console.log("ultima ubicacione de " + returnArr[i].key);
-      var obj_ubicacion = returnArr[i][returnArr[i].length - 1];
-      console.log(obj_ubicacion);
+      console.log("Última ubicación de " + returnArr[i].key);
+      var objUbicacion = returnArr[i][returnArr[i].length - 1];
+      console.log(objUbicacion);
 
       var row = table.insertRow(1);
       var cell1 = row.insertCell(0);
@@ -78,143 +61,149 @@ dbRef.on('value', snap => {
       var cell7 = row.insertCell(6);
 
       cell1.innerHTML = cont++;
-      cell2.innerHTML = obj_ubicacion.lat;
-      cell3.innerHTML = obj_ubicacion.lng;
-      cell4.innerHTML = obj_ubicacion.power;
+      cell2.innerHTML = objUbicacion.lat;
+      cell3.innerHTML = objUbicacion.lng;
+      cell4.innerHTML = objUbicacion.power;
       cell5.innerHTML = returnArr[i].key;
-      cell7.innerHTML = "<button class='btn btn-link' onclick='localizar_en_mapa(" + i + ")'>Seguir</button>";
+      cell7.innerHTML = "<button class='btn btn-link' onclick='localizarEnMapa(" + i + ")'>Ver</button>";
 
     }
 
-    if(returnArr[i].key== placa_vehiculo){
+    if(returnArr[i].key== placaVehiculo){
 
-      latitud_vehiculo= obj_ubicacion.lat;
-      longitud_vehiculo=obj_ubicacion.lng;
+      latitudVehiculo= objUbicacion.lat;
+      longitudVehiculo= objUbicacion.lng;
 
-      actualizar_marker(placa_vehiculo,latitud_vehiculo,longitud_vehiculo);
+      actualizarMarker(placaVehiculo,latitudVehiculo,longitudVehiculo);
     }
-
-    /*  for (j in returnArr[i]) {
-        var row = table.insertRow(1);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        var cell5 = row.insertCell(4);
-  
-        cell1.innerHTML = cont++;
-        cell2.innerHTML =  returnArr[i][j].lat;
-        cell3.innerHTML = returnArr[i][j].lng;
-        cell4.innerHTML = returnArr[i][j].power;
-        cell5.innerHTML = returnArr[i].key;
-
-      }*/
-
-
   }
-
-
-
-  /*const li= document.createElement('li');
-listaUsuarios=JSON.stringify(snap.val());
-
- li.innerText = listaUsuarios;
- lista.appendChild(li);*/
-
-  //console.log(JSON.stringify(snap.val()));
-// al final actualizar el marcador 
-
-
 });
 
-//***************************************************/
+// ---------------- Localiza en mapa ----------------
+function localizarEnMapa(posicion) {
+  var objUbicacion = returnArr[posicion][returnArr[posicion].length - 1];
+  latitudVehiculo= objUbicacion.lat;
+  longitudVehiculo= objUbicacion.lng;
+  placaVehiculo= returnArr[posicion].key;
+  actualizarMarker(placaVehiculo,latitudVehiculo,longitudVehiculo);
+  initMap();
 
-function actualizar_marker(placa_seleccionada,latitud,longitud){
-  var placa_vehiculo = document.getElementById('placa_seleccionada');
-  //placa_vehiculo.innerHTML= "Placa: " + placa_seleccionada + " Latitud: "+latitud+" Longitud:"+ longitud;
-  //obj_vehiculo;
-  localizar_en_mapa_obj(placa_seleccionada,latitud,longitud);
+  console.log(returnArr[posicion]);
+  latInicio = objUbicacion.lat;
+  lngInicio =  objUbicacion.lng;
+ 
+  var lugarInicio = {
+    lat: latInicio,
+    lng: lngInicio
+  };
+
+  map = new google.maps.Map(
+    document.getElementById('map'), {
+    zoom: 20,
+    center: lugarInicio
+  });
+
+  console.log(lugarInicio);
+  markerVehiculo= new google.maps.Marker({
+    position: lugarInicio,
+    label: returnArr[posicion].key,
+    map: map
+  });
+
 }
 
+// ---------------- Actualiza marcador ----------------
+function actualizarMarker(placa_seleccionada,latitud,longitud){
+  var placaVehiculo = document.getElementById('placa_seleccionada');
+  //placaVehiculo.innerHTML= "Placa: " + placa_seleccionada + " Latitud: "+latitud+" Longitud:"+ longitud;
+  localizarEnMapaObj(placa_seleccionada,latitud,longitud);
+}
+
+// ---------------- Localiza en mapa objeto ----------------
+function localizarEnMapaObj(placa, latitud,longitud) {
+  latitudVehiculo= latitud;
+  longitudVehiculo= longitud;
+  placaVehiculo= placa;
+  //actualizarMarker(placaVehiculo,latitudVehiculo,longitudVehiculo);
+  // alert(posicion);
+  initMap();
+
+  latInicio = latitud;
+  lngInicio =  longitud;
+ 
+  var lugarInicio = {
+    lat: latInicio,
+    lng: lngInicio
+  };
+
+  map = new google.maps.Map(
+    document.getElementById('map'), {
+      zoom: 18,
+      center: lugarInicio
+  });
+
+  console.log(lugarInicio);
+  markerVehiculo= new google.maps.Marker({
+    position: lugarInicio,
+    label: placa,
+    map: map
+  });
+}
+
+// ---------------- Despliega visitas en mapa ----------------
+function verTodosMapa(){
+  document.getElementById('divMapa').style.display = 'block'; 
+
+  initMap();
+
+  var locations = [];
+  console.log('Arreglo: ');
+  console.log(returnArr);
+  for(i in returnArr){
+    var objUbicacion = returnArr[i][returnArr[i].length - 1];
+    var latitud = objUbicacion.lat;
+    var longitud = objUbicacion.lng;
+    var lugar = [returnArr[i].key, latitud, longitud, i];
+    locations.push(lugar);
+  }
+  console.log('Local: ');
+  console.log(locations);
+
+  var centro = {
+    lat: locations[0][1],
+    lng: locations[0][2]
+  };
+  map = new google.maps.Map(
+    document.getElementById('map'), {
+      zoom: 20,
+      center: centro
+  });
+
+  var infowindow = new google.maps.InfoWindow();
+
+  var marker, i;
+
+  for (i = 0; i < locations.length; i++) { 
+      marker = new google.maps.Marker({
+      position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+      map: map,
+      id: locations[i][3],
+    });
+
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+      return function() {
+        infowindow.setContent(locations[i][0]);
+        infowindow.open(map, marker);
+      }
+    })(marker, i));
+  }
+}
+
+// ---------------- Cierra Sesión ----------------
 function logOut(){
   firebase.auth().signOut();
   //alert("Sesión cerrada.");
   window.location.href="../login.html";
-}
-//***************************************************/
-function localizar_en_mapa(posicion) {
-  var obj_ubicacion = returnArr[posicion][returnArr[posicion].length - 1];
-  latitud_vehiculo= obj_ubicacion.lat;
-  longitud_vehiculo= obj_ubicacion.lng;
-  placa_vehiculo= returnArr[posicion].key;
-  actualizar_marker(placa_vehiculo,latitud_vehiculo,longitud_vehiculo);
-  // alert(posicion);
-  initMap();
-
-
-  // posicion
-  console.log(returnArr[posicion]);
-  lat_inicio = obj_ubicacion.lat;
-  long_inicio =  obj_ubicacion.lng;
- 
-  var lugar_inicio = {
-    lat: lat_inicio,
-    lng: long_inicio
-  };
-
-  // zoom al mapa
-  map = new google.maps.Map(
-    document.getElementById('map'), {
-      zoom: 20,
-      center: lugar_inicio
-    });
-
-  console.log(lugar_inicio);
-  // The marker, positioned at Uluru
-  marker_vehiculo= new google.maps.Marker({
-    position: lugar_inicio,
-    label: returnArr[posicion].key,
-
-    map: map
-  });
-
-}
-
-//***************************************************/
-function localizar_en_mapa_obj(placa, latitud,longitud) {
-  latitud_vehiculo= latitud;
-  longitud_vehiculo= longitud;
-  placa_vehiculo= placa;
-  //actualizar_marker(placa_vehiculo,latitud_vehiculo,longitud_vehiculo);
-  // alert(posicion);
-  initMap();
-
-
-  // posicion
-  lat_inicio = latitud;
-  long_inicio =  longitud;
- 
-  var lugar_inicio = {
-    lat: lat_inicio,
-    lng: long_inicio
-  };
-
-  // zoom al mapa
-  map = new google.maps.Map(
-    document.getElementById('map'), {
-      zoom: 18,
-      center: lugar_inicio
-    });
-
-  console.log(lugar_inicio);
-  // The marker, positioned at Uluru
-  marker_vehiculo= new google.maps.Marker({
-    position: lugar_inicio,
-    label: placa,
-
-    map: map
-  });
-
 }
 
 

@@ -6,7 +6,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
   <link rel="stylesheet" href="../CSS/paginas.css">
 </head>
   <style>
@@ -24,7 +24,7 @@
   </script>
 
 
-<body class="container">
+<body>
     <nav class="navbar navbar-expand-lg navbar-light bg-dark">
         <div class="container-fluid">
             <ul class="nav navbar-nav">
@@ -92,8 +92,16 @@
       <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDr0u1SZQWsC8yQ9vaB7uSHS6hk0OzR1oo&callback=initMap">
       </script>
 </div>
+<div>
+  <div id="divMostrar">
+      <button id="btnMostrar" onclick="verTodosMapa()" class="btn btn-info">
+        <img src="../images/map.png" width="18" height="18" class="d-inline-block align-top" alt="">
+        Ver Todos
+      </button>
+  </div>
+</div>
 <div class="row">
-<div class="col-sm-8" id="tabla">
+<div class="container col-11" id="tabla">
   <table class="table" id="myTable">
     <thead>
         <tr>
@@ -107,18 +115,19 @@
           <th>Email</th>
           <th>Imagen</th>
           <th>Ubicacion</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
   </table>
   </div>
-  <div class=" container col-4" id="divNuevo" style="display:none">
+  <div class=" container col-5" id="divNuevo" style="width: 25% ; display:none">
     <button onclick="cerrar()" style="float:right"  class="btn btn-danger">X</button>
     <input type="hidden" id="key_cliente"  name="key_cliente" value="">
-  
       <div class="container" style="float: left;">
         <h2 id="nuevos">Editar Cliente</h2>
   
-          <div class="form-group">
+          <div class="form-group" id="divRUC">
               <label for="ruc"> RUC:</label>
               <input  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
               type = "number" maxlength = "15" class="form-control" id="ruc" placeholder="Ingrese el RUC" name="ruc">
@@ -150,17 +159,21 @@
             <label for="correo">Email:</label>
             <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control" id="email" placeholder="Ingrese el email" name="email">
           </div>
+          <div>
+              <label for="imagen">Imagen:</label>
+          </div>
           <div class="form-group" id="divImagen">
-            <label for="imagen">Imagen:</label>
             <img id="imagen" width="150" height="150">
           </div>
           <div class="form-group" style="display:none">
             <label for="imagenURI">imagenURI">URL:</label>
             <input type="text" class="form-control" id="imagenURI" name="imagenURI">
           </div>
-          <div class="form-group"  >
-            <progress value="0" max="100" id="uploader">0%</progress>
-            <input type="file"  value="upload" id="btnImagen" accept="image/*" />
+          <div class="form-group">
+            <progress class="progress-bar" value="0" max="100" id="uploader">0%</progress>
+          </div>
+          <div class="form-group">
+            <input type="file" value="upload" id="btnImagen" accept="image/*" />
           </div>
           <div class="form-group" style="display:none" >
             <label for="lat">lat:</label>
@@ -170,13 +183,13 @@
             <label for="lng">lng:</label>
             <input type="text" class="form-control" id="lng" name="lng">
           </div>
-          <button  class="btn btn-info" id="btn_editar" onclick="ejecutarEditar()">Guardar</button>
+          <button  class="btn btn-info" id="btnEditar" onclick="ejecutarEditar()">Guardar</button>
       </div>
       </div>
     </div>
-    <div id="divMapa" style="display:none" >
+    <div id="divMapa" class=" container col-10" style="display:none" >
         <h3>MAPA</h3>
-        <button onclick="cerrarMapa()" style="float:right"  class="btn btn-danger">X</button>
+        <button id="btnCerrarMapa" onclick="cerrarMapa()" style="float:right"  class="btn btn-danger">X</button>
         <div id="map"></div>
     </div>
   <script src="../js/clientes.js"></script>

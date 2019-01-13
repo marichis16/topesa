@@ -1,23 +1,27 @@
+// ---------------- Variables ----------------
 var returnArr = [];
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyD84c5uXptNfZa0UcaxvTuVZd2R3eTzvxA",
-    authDomain: "control-7c5d7.firebaseapp.com",
-    databaseURL: "https://control-7c5d7.firebaseio.com",
-    projectId: "control-7c5d7",
-    storageBucket: "control-7c5d7.appspot.com",
-    messagingSenderId: "635319972706"
-  };
-  firebase.initializeApp(config);
+var placaVehiculo = "";
 
-  const lista = document.getElementById('lista');
-  const dbRef = firebase.database().ref().child('vehiculos');
-  const dbRef_empleados = firebase.database().ref().child('empleados');// para pobalr el select 
+// ---------------- Inicializa Firebase ----------------
+var config = {
+  apiKey: "AIzaSyD84c5uXptNfZa0UcaxvTuVZd2R3eTzvxA",
+  authDomain: "control-7c5d7.firebaseapp.com",
+  databaseURL: "https://control-7c5d7.firebaseio.com",
+  projectId: "control-7c5d7",
+  storageBucket: "control-7c5d7.appspot.com",
+  messagingSenderId: "635319972706"
+};
+firebase.initializeApp(config);
 
-  dbRef.on('value', snap => {
+// ---------------- Inicializa las bases ----------------
+const lista = document.getElementById('lista');
+const dbRef_vehiculos = firebase.database().ref().child('vehiculos');
+const dbRef_empleados = firebase.database().ref().child('empleados');// Para el select 
+
+dbRef_vehiculos.on('value', snap => {
   returnArr=[];
-  snap.forEach(function(snap) {// recorremos los empleados
-    console.log('Elemento');
+  snap.forEach(function(snap) {// Recorre los empleados
+    console.log('Elemento vehiculo');
     var item=snap.val();
     item.key = snap.key;
     for (i in item) {
@@ -27,23 +31,15 @@ var returnArr = [];
       }
     }
   });
- 
 
+  // Llena tabla
+  var table= document.getElementById('myTable');
+  var tableHeaderRowCount = 1;
+  var rowCount = table.rows.length;
+  for (var i = tableHeaderRowCount; i < rowCount; i++) {
+      table.deleteRow(tableHeaderRowCount);
+  }
 
-
-
-
-//--------------------------------
-var table= document.getElementById('myTable');
-
-var tableHeaderRowCount = 1;
-var table = document.getElementById('myTable');
-var rowCount = table.rows.length;
-for (var i = tableHeaderRowCount; i < rowCount; i++) {
-    table.deleteRow(tableHeaderRowCount);
-}
-
-// poblando la tabla
   for (i in returnArr) {
     var row = table.insertRow(1);
     var cell1 = row.insertCell(0);
@@ -61,74 +57,74 @@ for (var i = tableHeaderRowCount; i < rowCount; i++) {
     cell4.innerHTML = returnArr[i].marca;
     cell5.innerHTML = returnArr[i].color;
     cell6.innerHTML = returnArr[i].anio;
-    cell7.innerHTML = "<button class='btn btn-link' onclick='cargar_editar("+i+")'>Editar</button>";
-    cell8.innerHTML = "<button class='btn btn-link' onclick='ejecutar_eliminar(\""+returnArr[i].vehiculoID+"\", \""+returnArr[i].empleadoID+"\")'>Eliminar</button>";
-}
-
+    cell7.innerHTML = "<button class='btn btn-link' onclick='cargarEditar("+i+")'>Editar</button>";
+    cell8.innerHTML = "<button class='btn btn-link' onclick='ejecutarEliminar(\""+returnArr[i].vehiculoID+"\", \""+returnArr[i].empleadoID+"\")'>Eliminar</button>";
+  }
 });
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- // recorrer los empleados
-
-    dbRef_empleados.on('value', snap => {
-    returnArrEmpleados=[];
-    snap.forEach(function(snap) {
-      console.log('Elemento vehiculos');
-      var item=snap.val();// un vehiculo 
-      item.key = snap.key;
-
-      console.log( item);
-      returnArrEmpleados.push(item);// agregar el vehiculo a la lista 
+// ---------------- Llena el select de empleados ----------------
+dbRef_empleados.on('value', snap => {
+  returnArrEmpleados=[];
+  snap.forEach(function(snap) {
+    console.log('Empleado');
+    var item=snap.val();// Un vehiculo 
+    item.key = snap.key;
+    console.log( item);
+    returnArrEmpleados.push(item);// Agrega a la lista 
   });
-
 
   console.log('Arreglo de empleados');
   console.log( returnArrEmpleados);
-  // poblar el select de empleados con id. empleado
   var select_empleado = document.getElementById("empleado");
 
-    for (i in returnArrEmpleados) {
+  for (i in returnArrEmpleados) {
+    var option = document.createElement("option");
+    option.text =  returnArrEmpleados[i].nombre + " "+  returnArrEmpleados[i].apellido;
+    option.value =  returnArrEmpleados[i].key;
+    select_empleado.add(option);
+  }
+});
 
-        var option = document.createElement("option");// crear la opcion 
-        option.text =  returnArrEmpleados[i].nombre + " "+  returnArrEmpleados[i].apellido;
-        option.value =  returnArrEmpleados[i].key;
-        select_empleado.add(option);
-    }
-  });
-
-
-function myFunction() {
-
-
-}
-
-// inserta la data en el arbol de firebase 
+// ---------------- Ejecutar Insert ----------------
 function ejecutarInsert(){
-    // obtener los datos del formulario 
   var empleadoID = document.getElementById('empleado').value;
   var placa = document.getElementById('placa').value;
   var marca = document.getElementById('marca').value;
   var modelo = document.getElementById('modelo').value;
   var color = document.getElementById('color').value;
   var anio = document.getElementById('anio').value;
-
-  insertar(placa, marca, modelo, color, anio, empleadoID);
+  if(empleadoID != ""){
+    if( placa != "" && marca != "" && color != "" && anio != "" && modelo!= ""){
+      if(verificarRepeticion()){
+        //alert("Valido.");
+        insertar(placa, marca, modelo, color, anio, empleadoID);
+      }
+      else
+       alert("La placa del vehículo ya existe.");
+    }
+    else
+      alert("Ingrese todos los campos.");
+  }
+  else
+    alert("Seleccione un empleado..");
 }
 
+// ---------------- Inserta en la base ----------------
 function insertar(placa, marca, modelo, color, anio, empleadoID){
-  var dbRef = firebase.database().ref().child('vehiculos').child(empleadoID);
-  var refnuevo = dbRef.push({
+  var dbRef_vehiculos = firebase.database().ref().child('vehiculos').child(empleadoID);
+  var refnuevo = dbRef_vehiculos.push({
       placa: placa,
       marca : marca,
       modelo : modelo,
       color : color,
       anio : anio,
       empleadoID : empleadoID,
-      vehiculoID: dbRef.key
+      vehiculoID: dbRef_vehiculos.key
   });
+
   var key= refnuevo.key;
-  dbRef = firebase.database().ref().child('vehiculos').child(empleadoID).child(key);
-    var refnuevo = dbRef.set({
+  dbRef_vehiculos = firebase.database().ref().child('vehiculos').child(empleadoID).child(key);
+    var refnuevo = dbRef_vehiculos.set({
       placa: placa,
       marca : marca,
       modelo : modelo,
@@ -137,15 +133,15 @@ function insertar(placa, marca, modelo, color, anio, empleadoID){
       empleadoID : empleadoID,
       vehiculoID: key
     });
-  alert("key: "+key);
-  // alert("Vehículo creado correctamente");
+
+  alert("Vehículo ingresado correctamente.");
   console.log("vehiculo nuevo .");
   console.log(refnuevo);
   mostrarNuevo();
-
 }
 
-function cargar_editar(posicion){
+// ---------------- Cargar Editar ----------------
+function cargarEditar(posicion){
 
   document.getElementById('empleado').value= returnArr[posicion].empleadoID;
   document.getElementById('placa').value= returnArr[posicion].placa;
@@ -154,10 +150,11 @@ function cargar_editar(posicion){
   document.getElementById('color').value= returnArr[posicion].color;
   document.getElementById('anio').value= returnArr[posicion].anio;
   document.getElementById('key_vehiculo').value= returnArr[posicion].vehiculoID;
-
+  placaVehiculo = returnArr[posicion].placa;
   mostrarExistente();
 }
 
+// ---------------- Ejecutar Editar ----------------
 function ejecutarEditar(){
 
   var empleadoID = document.getElementById('empleado').value;
@@ -167,14 +164,27 @@ function ejecutarEditar(){
   var color = document.getElementById('color').value;
   var anio = document.getElementById('anio').value;
   var key_vehiculo = document.getElementById('key_vehiculo').value;
-    
-  editar(key_vehiculo,empleadoID,placa,marca, modelo, color, anio);
 
+  if(empleadoID != ""){
+    if( placa != "" && marca != "" && color != "" && anio != "" && modelo!= ""){
+      if(verificarRepeticion()){
+        //alert("Valido.");
+        editar(key_vehiculo,empleadoID,placa,marca, modelo, color, anio);
+      }
+      else
+       alert("La placa del vehículo ya existe.");
+    }
+    else
+      alert("Ingrese todos los campos.");
+  }
+  else
+    alert("Seleccione un empleado..");
 }
 
+// ---------------- Edita en la base ----------------
 function editar(key_vehiculo,empleadoID,placa,marca, modelo, color, anio){
-  const dbRef = firebase.database().ref('vehiculos/' + empleadoID+'/'+key_vehiculo);//.child('empleados');
-    var refnuevo = dbRef.update({
+  const dbRef_vehiculos = firebase.database().ref('vehiculos/' + empleadoID+'/'+key_vehiculo);//.child('empleados');
+    var refnuevo = dbRef_vehiculos.update({
       placa: placa,
       marca : marca,
       modelo : modelo,
@@ -186,31 +196,47 @@ function editar(key_vehiculo,empleadoID,placa,marca, modelo, color, anio){
     alert("Actualizado correctamente");
 }
 
-function ejecutar_eliminar(key_vehiculo, empleadoID){
+// ---------------- Ejecuta Eliminar ----------------
+function ejecutarEliminar(key_vehiculo, empleadoID){
   if( confirm("Seguro desea eliminar?")){
     eliminar(key_vehiculo, empleadoID);
   }
 }
 
+// ---------------- Elimina de la base ----------------
 function eliminar(key_vehiculo, empleadoID){
-  const dbRef = firebase.database().ref('vehiculos/' + empleadoID+'/'+key_vehiculo);//.child('empleados');
-  dbRef.remove();
+  const dbRef_vehiculos = firebase.database().ref('vehiculos/' + empleadoID+'/'+key_vehiculo);//.child('empleados');
+  dbRef_vehiculos.remove();
 }
 
-function fechaDDMMAA(fechaAAMMDD){
-    //2018-01-01 --> 01-01-2018
-    var anio= fechaAAMMDD.substring(0,4);
-    var mes= fechaAAMMDD.substring(5,7);
-    var dia= fechaAAMMDD.substring(8,10);
-    return dia+"-"+mes+"-"+anio;
-    
+// ---------------- Verificar Repetición ----------------
+function verificarRepeticion (){
+  var placa = document.getElementById('placa').value.trim();
+  var verifica = true;
+
+  console.log('Arreglo de empleados');
+  console.log( returnArr);
+
+    for (i in returnArr) {
+      if(placa == returnArr[i].placa){
+        if(placa != placaVehiculo){
+          verifica = false;
+          break;
+        }
+        else
+          verifica = true;
+      }
+    }
+  return verifica;
 }
+
+// ---------------- Formulario nuevo registro ----------------
 function mostrarNuevo() {
   var x = document.getElementById("divNuevo");
   if (x.style.display === "none") {
     x.style.display = "block";
-    document.getElementById('btn_insertar').style.display = 'block'; 
-    document.getElementById('btn_editar').style.display = 'none'; 
+    document.getElementById('btnInsertar').style.display = 'block'; 
+    document.getElementById('btnEditar').style.display = 'none'; 
 
     document.getElementById('empleado').value= document.getElementById('selecEmpleado').value;
     document.getElementById('placa').value= "";
@@ -219,23 +245,34 @@ function mostrarNuevo() {
     document.getElementById('color').value= "";
     document.getElementById('anio').value= "";
     document.getElementById('key_vehiculo').value="";
-  } else {
+  } 
+  else {
     x.style.display = "none";
   }
 }
 
+// ---------------- Formulario registro existente ----------------
 function mostrarExistente() {
   document.getElementById("divNuevo").style.display = "block";
-  document.getElementById('btn_insertar').style.display = 'none'; 
-  document.getElementById('btn_editar').style.display = 'block'; 
+  document.getElementById('btnInsertar').style.display = 'none'; 
+  document.getElementById('btnEditar').style.display = 'block'; 
 }
 
+// ---------------- Cierra Formulario ----------------
 function cerrarNuevo(){
   document.getElementById('divNuevo').style.display = 'none';
 }
 
+// ---------------- Cierra Sesión ----------------
 function logOut(){
   firebase.auth().signOut();
   //alert("Sesión cerrada.");
   window.location.href="../login.html";
+}
+
+// ---------------- Mayúsculas ----------------
+function upperCase(a){
+  setTimeout(function(){
+      a.value = a.value.toUpperCase();
+  }, 1);
 }

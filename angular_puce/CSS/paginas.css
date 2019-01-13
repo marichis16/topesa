@@ -34,15 +34,29 @@
 #nbarImgMenu{
     margin-top: -5px;
 }
-#btnNuevo{
+#btnNuevo, #btnMostrar{
     height:35px;
     width:150px;
     margin-left:75px; 
     margin-top: 25px
 }
+#divBuscar{
+    margin-left:75px; 
+    margin-top: 25px
+}
+
 #tabla{
     margin-top: 25px;
 }
+#map{
+    margin-bottom: 50px;
+}
 th, td{
     text-align: center;
+}
+.file-field.big .file-path-wrapper {
+    height: 3.2rem; 
+}
+.file-field.big .file-path-wrapper .file-path {
+height: 3rem; 
 }

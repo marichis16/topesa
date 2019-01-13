@@ -47,7 +47,7 @@
     <h1 id = "titulos">Vehículos</h1>  
 </div>
 <div>
-    <button class="btn btn-info btn-sm form-control" id="btnNuevo" onclick="mostrarNuevo()">Ingresar Nuevo</button>
+    <button class="btn btn-info form-control" id="btnNuevo" onclick="mostrarNuevo()">Ingresar Nuevo</button>
 </div>
 <div class="row">
 
@@ -71,47 +71,40 @@
 
 
 <!-- formulario para crear un nuevo vehiculo -->
-<div class=" container col-4 " id="divNuevo" style="width: 25% ; display:none">
+<div class=" container col-5" id="divNuevo" style="width: 25% ; display:none">
   <button onclick="cerrarNuevo()" style="float:right"  class="btn btn-danger">X</button>
   <input type="hidden" id="key_vehiculo"  name="key_vehiculo" value="">  
   <div class="container" style="float: left;">
       <h2 id="nuevos">Crear Nuevo Vehículo</h2>
-            <div class="form-group" style="margin-top: 25px">
-            
-                    <label for="empleado">Empleado:</label>
-                    <select id="empleado" class="custom-select">
-                        <option id="selecEmpleado" value="">Seleccione un empleado</option>
-                    </select>
-                  </div>
+        <div class="form-group" style="margin-top: 25px">
+            <label for="empleado">Empleado:</label>
+            <select id="empleado" class="custom-select">
+                <option id="selecEmpleado" value="">Seleccione un empleado</option>
+            </select>
+        </div>
         <div class="form-group">
             <label for="placa"> Placa:</label>
-            <input type="text" class="form-control" id="placa" placeholder="Ingrese la placa" name="placa">
+            <input type="text" maxlength="10" class="form-control" id="placa" placeholder="Ingrese la placa" name="placa" onkeydown="upperCase(this)">
         </div>
-
         <div class="form-group">
-                <label for="marca">Marca:</label>
-                <input type="text" class="form-control" id="marca" placeholder="Ingrese la marca" name="marca">
+            <label for="marca">Marca:</label>
+            <input type="text" class="form-control" id="marca" placeholder="Ingrese la marca" name="marca">
         </div>
         <div class="form-group">
           <label for="modelo">Modelo:</label>
           <input type="text" class="form-control" id="modelo" placeholder="Ingrese el modelo" name="modelo">
         </div>
-
         <div class="form-group">
           <label for="color">Color:</label>
           <input type="text" class="form-control" id="color"  placeholder="Ingrese el color"  name="color">
-    
         </div>
-
         <div class="form-group">
             <label for="anio">Año:</label>
             <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
             type = "number" maxlength = "4" class="form-control" id="anio"  placeholder="Ingrese el año"  name="anio">
-      
         </div>
-
-        <button  class="btn btn-success" id="btn_insertar" onclick="ejecutarInsert()">Insertar</button>
-        <button  class="btn btn-info" id="btn_editar" onclick="ejecutarEditar()">Guardar</button>
+        <button  class="btn btn-success" id="btnInsertar" onclick="ejecutarInsert()">Insertar</button>
+        <button  class="btn btn-info" id="btnEditar" onclick="ejecutarEditar()">Guardar</button>
     </div>
     </div>
   </div>

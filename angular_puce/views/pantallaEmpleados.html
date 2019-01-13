@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,10 +43,9 @@
       </nav>
 <div class="container">
     <h1 id = "titulos">Empleados</h1>
-    <button hidden="hidden" class="btn btn-success form-control" onclick="myFunction()">Cargar</button>
 </div>
 <div>
-    <button class="btn btn-info btn-sm form-control " id="btnNuevo" onclick="mostrarNuevo()">Ingresar Nuevo</button>
+    <button class="btn btn-info form-control " id="btnNuevo" onclick="mostrarNuevo()">Ingresar Nuevo</button>
 </div>
 
 <div class="row">
@@ -72,50 +69,40 @@
 
 
 <!-- formulario para crear un nuevo empleado -->
-<div class=" container col-4" id="divNuevo" style="width: 25%; display:none">
+<div class=" container col-5" id="divNuevo" style="width: 25%; display:none">
   <button onclick="cerrarNuevo()" style="float:right"  class="btn btn-danger">X</button>
   <input type="hidden" id="key_empleado"  name="key_empleado" value="">
-
     <div class="container" style="float: left;">
       <h2 id="nuevos">Crear Nuevo Empleado</h2>
-
         <div class="form-group">
             <label for="cedula"> Cédula:</label>
             <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
             type = "number" maxlength="13" class="form-control" id="cedula" placeholder="Ingrese la cédula" name="cedula">
         </div>
         <div class="form-group">
-            
           <label for="nombre">Nombre:</label>
           <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre" name="nombre">
         </div>
         <div class="form-group">
-                <label for="apelido">Apellido:</label>
-                <input type="text" class="form-control" id="apellido" placeholder="Ingrese el apellido" name="apelido">
+            <label for="apellido">Apellido:</label>
+            <input type="text" class="form-control" id="apellido" placeholder="Ingrese el apellido" name="apellido">
         </div>
-
-        
         <div class="form-group">
-          <label for="email">Telefono:</label>
+          <label for="telefono">Telefono:</label>
           <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
             type = "number" maxlength = "9" maxlength="10" class="form-control" id="telefono"  placeholder="Ingrese el teléfono"  name="telefono">
-    
         </div>
-
         <div class="form-group" id="divEmail">
           <label for="correo">Email:</label>
           <input type="email" class="form-control" id="email" placeholder="Ingrese el email" name="email">
         </div>
-
         <div class="form-group" id="divPass">
           <label for="password">Contraseña:</label>
           <input type="password" class="form-control" id="password" placeholder="Ingrese la contraseña" name="password">
         </div>
 
-        <button  class="btn btn-success" id="btn_insertar" onclick="ejecutarInsert()">Insertar</button>
-        <button  class="btn btn-info" id="btn_editar" onclick="ejecutarEditar()">Guardar</button>
-
-
+        <button  class="btn btn-success" id="btnInsertar" onclick="ejecutarInsert()">Insertar</button>
+        <button  class="btn btn-info" id="btnEditar" onclick="ejecutarEditar()">Guardar</button>
     </div>
     </div>
   </div>

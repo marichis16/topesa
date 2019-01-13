@@ -21,7 +21,7 @@
   </script>
 </head>
 
-<body class="" style="padding: 10px;">
+<body>
     <nav class="navbar navbar-expand-lg navbar-light bg-dark">
         <div class="container-fluid">
             <ul class="nav navbar-nav">
@@ -58,26 +58,33 @@
       </nav>
 
   <h1 id = "titulos">Ubicación de Vehículos</h1>
-  <button hidden="hidden" class="btn btn-success form-control" onclick="myFunction()">Cargar</button>
+  <div>
+    <div id="divMostrar">
+        <button id="btnMostrar" onclick="verTodosMapa()" class="btn btn-info">
+          <img src="../images/map.png" width="18" height="18" class="d-inline-block align-top" alt="">
+          Ver Todos
+        </button>
+    </div>
+  </div>
   <div class="row">
-    <div class="col-12">
-      <table class="table" id="myTable" style="margin-top: 25px" onchange="alert('hola')">
-        <thead>
+  <div class="container col-11" id="tabla">
+      <table class="table" id="myTable">
+        <thead class="thead-light">
           <tr>
             <th>#</th>
             <th>Latitud</th>
             <th>Longitud</th>
             <th>Bateria</th>
             <th>Placa</th>
+            <th></th>
           </tr>
         </thead>
       </table>
     </div>
   </div>
-  <div style="margin-top: 50px ; height: 400px">
+  <div id="divMapa" class=" container col-10" >
       <div id="map" style="height: 400px"></div>
   </div>
-
   <script src="../js/localizaciones.js"></script>
   <script>
     // Initialize and add the map
